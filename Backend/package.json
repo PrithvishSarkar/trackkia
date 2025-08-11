@@ -1,0 +1,31 @@
+{
+  "name": "trackkia-backend",
+  "version": "1.0.0",
+  "description": "Backend for Task Manager Application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mysql",
+    "drizzle",
+    "task",
+    "management"
+  ],
+  "author": "Prithvish Sarkar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "drizzle-orm": "^0.44.4",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "drizzle-kit": "^0.31.4",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
