@@ -21,7 +21,6 @@ const pool: mysql.Pool = mysql.createPool({
   connectionLimit: 10, // number of connections in pool.
   queueLimit: 0,
 });
-pool && console.log("Connected to MySQL Database!");
 
 // Exporting drizzle connection.
 export default drizzle(pool);
