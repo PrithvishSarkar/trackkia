@@ -20,6 +20,7 @@ const pool: mysql.Pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10, // number of connections in pool.
   queueLimit: 0,
+  timezone: 'Z', // Date and Time always in UTC timezone.
 });
 
 // Exporting drizzle connection.

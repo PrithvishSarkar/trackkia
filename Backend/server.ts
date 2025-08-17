@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import testConnection from "./testConnection.js";
 import authRouter from "./routes/authRoutes.js";
+import taskRouter from "./routes/taskRoutes.js";
 
 dotenv.config({ path: "./.env" }); // Defining Environment Variable path.
 testConnection(); // Connecting to MySQL Database.
@@ -26,7 +27,8 @@ app.use(
   })
 );
 app.use(cookieParser());
-app.use("/api", authRouter);
+app.use("/auth", authRouter);
+app.use("/task", taskRouter);
 /* Middlewares ends here */
 
 app.get("/", (_, res) => {

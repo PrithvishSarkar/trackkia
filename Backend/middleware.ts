@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const protectedRouteMiddleware = (
+export const protectedRouteMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -46,5 +46,3 @@ const protectedRouteMiddleware = (
     console.error("Token Verification Error: ", err.message);
   }
 };
-
-export default protectedRouteMiddleware;

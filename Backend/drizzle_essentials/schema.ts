@@ -1,6 +1,5 @@
 import { sql } from "drizzle-orm";
 import {
-  date,
   datetime,
   int,
   mysqlEnum,
@@ -38,6 +37,8 @@ export const tasks = mysqlTable("tasks", {
   userId: int("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  startingDate: date("startingDate").notNull(), // Frontend will provide the data for 'date'.
-  deadline: date("deadline").notNull(), // Frontend will provide the data for 'date'.
+
+  // Frontend will provide the data for 'date'.
+  startingDate: datetime("startingDate", { mode: "date" }).notNull(),
+  deadline: datetime("deadline", { mode: "date" }).notNull(),
 });

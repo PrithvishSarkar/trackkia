@@ -12,7 +12,7 @@ const registerController = async (req: Request, res: Response) => {
   if (!name.trim() || !email.trim() || !password.trim()) {
     res
       .status(400)
-      .json({ status: "success", message: "Credentials cannot be empty!" });
+      .json({ status: "failure", message: "Credentials cannot be empty!" });
     return;
   }
 
@@ -62,7 +62,7 @@ const registerController = async (req: Request, res: Response) => {
     .where(eq(users.id, result[0].insertId));
   
   // Sending appropriate response to Frontend.
-  res.status(200).json({
+  res.status(201).json({
     status: "success",
     message: "User Registered Successfully!",
     userName, // This will be stored in Client Side Local Storage.
