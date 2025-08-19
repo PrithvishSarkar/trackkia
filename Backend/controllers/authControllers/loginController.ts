@@ -8,7 +8,11 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 
 const loginController = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  interface RequestBodyType {
+    email: string;
+    password: string;
+  }
+  const { email, password }: RequestBodyType = req.body;
 
   // Check if credentials are valid or not.
   if (!email.trim() || !password.trim()) {
@@ -18,59 +22,68 @@ const loginController = async (req: Request, res: Response) => {
     return;
   }
 
-  // Check if user exists in Database or not.
-  interface userInfoDataType {
-    id: number;
-    name: string;
-    password: string;
-  }
-  const userInfoArray: userInfoDataType[] = await db
-    .select({ id: users.id, name: users.name, password: users.password })
-    .from(users)
-    .where(eq(users.email, email));
+  try {
+    // Check if user exists in Database or not.
+    interface userInfoDataType {
+      id: number;
+      name: string;
+      password: string;
+    }
+    const userInfoArray: userInfoDataType[] = await db
+      .select({ id: users.id, name: users.name, password: users.password })
+      .from(users)
+      .where(eq(users.email, email.toLowerCase()));
 
-  if (userInfoArray.length === 0) {
-    res.status(400).json({ status: "failure", message: "User Not Found!" });
-    return;
-  }
+    if (userInfoArray.length === 0) {
+      res.status(400).json({ status: "failure", message: "User Not Found!" });
+      return;
+    }
 
-  // When user is found, verify password.
-  const isPasswordMatched: boolean = await bcrypt.compare(
-    password,
-    userInfoArray[0].password
-  );
-  if (!isPasswordMatched) {
-    res.status(401).json({ status: "failure", message: "Incorrect Password!" });
-    return;
-  }
+    // When user is found, verify password.
+    const isPasswordMatched: boolean = await bcrypt.compare(
+      password,
+      userInfoArray[0].password
+    );
+    if (!isPasswordMatched) {
+      res
+        .status(401)
+        .json({ status: "failure", message: "Incorrect Password!" });
+      return;
+    }
 
-  // If password matches, generate and packing it in a Cookie.
-  const JWT_SECRET: string = process.env.JWT_SECRET || "";
-  if (!JWT_SECRET) {
-    res.status(500).json({
-      status: "failure",
-      message: "JWT secret key not found in Environment Variables!",
+    // If password matches, generate and packing it in a Cookie.
+    const JWT_SECRET: string = process.env.JWT_SECRET || "";
+    if (!JWT_SECRET) {
+      res.status(500).json({
+        status: "failure",
+        message: "JWT secret key not found in Environment Variables!",
+      });
+      return;
+    }
+    const token: string = jwt.sign({ id: userInfoArray[0].id }, JWT_SECRET, {
+      expiresIn: "7d",
     });
-    return;
-  }
-  const token: string = jwt.sign({ id: userInfoArray[0].id }, JWT_SECRET, {
-    expiresIn: "7d",
-  });
-  res.cookie("trackkia_token", token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  });
+    res.cookie("trackkia_token", token, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
 
-  // Sending appropriate response to Frontend.
-  res
-    .status(200)
-    .json({
+    // Sending appropriate response to Frontend.
+    res.status(200).json({
       status: "success",
       message: "User Logged In Successfully!",
       userName: userInfoArray[0].name, // This will be stored in Client Side Local Storage.
     });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({
+      status: "failure",
+      message: "Something broke while logging in!",
+    });
+    return;
+  }
 };
 
 export default loginController;
