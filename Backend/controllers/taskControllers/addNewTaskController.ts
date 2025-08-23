@@ -2,6 +2,15 @@ import { Request, Response } from "express";
 import db from "../../connection.js";
 import { tasks } from "../../drizzle_essentials/schema.js";
 
+// Extend Express Request interface to include 'user'.
+declare global {
+  namespace Express {
+    interface Request {
+      userId: number;
+    }
+  }
+}
+
 const addNewTaskController = async (req: Request, res: Response) => {
   const userId = req.userId;
 
@@ -48,7 +57,7 @@ const addNewTaskController = async (req: Request, res: Response) => {
 
   res
     .status(201)
-    .json({ status: "success", message: "Task Added Successfully!", result });
+    .json({ status: "success", message: "Task Added Successfully!" });
 };
 
 export default addNewTaskController;

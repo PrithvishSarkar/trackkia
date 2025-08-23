@@ -68,11 +68,9 @@ const sendOtpController = async (req: Request, res: Response) => {
       });
       return;
     }
-    // If user found, then first generate OTP then send an email to the user.
+    // If user found, then generate OTP and save to Database.
     const { id: userId }: { id: number } = userDataArray[0];
     const OTP: string = generateOTP();
-    sendOTP(email, OTP, res);
-
     // If OTP for the given user already exists, then send a warning.
     const [{ count }] = await db
       .select({ count: sql<number>`COUNT(*)` })
@@ -85,15 +83,17 @@ const sendOtpController = async (req: Request, res: Response) => {
 
     // Hash the generated OTP and store it in Database.
     const hashedOTP: string = await bcrypt.hash(OTP, 10);
-    db.insert(otps).values({
+    await db.insert(otps).values({
       otp: hashedOTP,
       otpExpiry: new Date(Date.now() + 5 * 60 * 1000),
       userId,
     });
+    sendOTP(email, OTP, res);
   } catch (err) {
+    console.error(err.message);
     res.status(500).json({
       status: "failure",
-      message: `OTP Sending Error or Database Error!`,
+      message: "Sending OTP Failed or Database Problem!",
     });
     return;
   }

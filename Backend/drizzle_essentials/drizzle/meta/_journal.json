@@ -5,29 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1755001853861,
-      "tag": "0000_mysterious_quasar",
+      "when": 1755958090638,
+      "tag": "0000_brave_black_widow",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1755421505962,
-      "tag": "0001_silly_vector",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1755945177839,
-      "tag": "0002_black_demogoblin",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1755951164187,
-      "tag": "0003_futuristic_the_santerians",
+      "when": 1755959024940,
+      "tag": "0001_real_butterfly",
       "breakpoints": true
     }
   ]

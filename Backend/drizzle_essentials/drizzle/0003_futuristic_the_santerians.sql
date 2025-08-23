@@ -1,1 +1,0 @@
-ALTER TABLE `otps` MODIFY COLUMN `otp` varchar(20) NOT NULL;

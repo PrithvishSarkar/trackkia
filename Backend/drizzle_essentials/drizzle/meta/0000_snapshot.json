@@ -1,9 +1,84 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "a4a569fb-2160-422f-8c09-1e6bc8b1799b",
+  "id": "c51e1613-bb3f-48c8-837f-92ed06359ca3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "otps": {
+      "name": "otps",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "otp": {
+          "name": "otp",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "otpExpiry": {
+          "name": "otpExpiry",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "otps_userId_users_id_fk": {
+          "name": "otps_userId_users_id_fk",
+          "tableFrom": "otps",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "otps_id": {
+          "name": "otps_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "tasks": {
       "name": "tasks",
       "columns": {
@@ -52,14 +127,14 @@
         },
         "startingDate": {
           "name": "startingDate",
-          "type": "date",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "deadline": {
           "name": "deadline",
-          "type": "date",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

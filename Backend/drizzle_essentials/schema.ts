@@ -47,7 +47,7 @@ export const otps = mysqlTable(
   "otps",
   {
     id: int("id").primaryKey().autoincrement(),
-    otp: varchar("otp", { length: 20 }).notNull(),
+    otp: varchar("otp", { length: 255 }).notNull(),
     otpExpiry: datetime("otpExpiry", { mode: "date" }).notNull(),
     userId: int("userId")
       .notNull()
