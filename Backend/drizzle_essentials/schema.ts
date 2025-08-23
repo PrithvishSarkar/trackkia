@@ -42,3 +42,19 @@ export const tasks = mysqlTable("tasks", {
   startingDate: datetime("startingDate", { mode: "date" }).notNull(),
   deadline: datetime("deadline", { mode: "date" }).notNull(),
 });
+
+export const otps = mysqlTable(
+  "otps",
+  {
+    id: int("id").primaryKey().autoincrement(),
+    otp: varchar("otp", { length: 20 }).notNull(),
+    otpExpiry: datetime("otpExpiry", { mode: "date" }).notNull(),
+    userId: int("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: datetime("createdAt")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [uniqueIndex("userId_idx").on(table.userId)]
+);
