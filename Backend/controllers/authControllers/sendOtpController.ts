@@ -5,7 +5,6 @@ import { otps } from "../../drizzle_essentials/schema.js";
 import { eq, sql } from "drizzle-orm";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
@@ -15,7 +14,12 @@ const generateOTP = () => {
   return OTP;
 };
 
-const sendOTP = async (email: string, OTP: string, res: Response) => {
+const sendOTP = async (
+  email: string,
+  OTP: string,
+  res: Response,
+  userId: number
+) => {
   // Create a Transporter with appropriate values.
   const transporter = nodemailer.createTransport({
     service: process.env.SMPT_SERVER,
@@ -35,6 +39,7 @@ const sendOTP = async (email: string, OTP: string, res: Response) => {
     res.status(200).json({
       status: "success",
       message: `OTP Sent. \nPlease check your email!`,
+      userId
     });
   } catch (err) {
     res
@@ -90,27 +95,10 @@ const sendOtpController = async (req: Request, res: Response) => {
       userId,
     });
 
-    /*
-    Generate a token using 'userId' and set it in a cookie.
-    This will be used to verify OTP as verification needs 'userId'.
-    */
-    const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
-    if (!JWT_SECRET) {
-      res.status(500).json({
-        status: "failure",
-        message: "JWT secret not found in Environment Variables!",
-      });
-      return;
-    }
-    const token: string = jwt.sign({ id: userId }, JWT_SECRET, {
-      expiresIn: 5 * 60 * 1000, // 5 minutes
-    });
-    res.cookie("trackkia_otp_token", token);
-
     // Sending OTP to user via email.
-    sendOTP(email, OTP, res);
+    sendOTP(email, OTP, res, userId);
   } catch (err) {
-    console.error(err.message);
+    console.error("OTP Sending or Database Error: ", err.message);
     res.status(500).json({
       status: "failure",
       message: "Sending OTP Failed or Database Problem!",
