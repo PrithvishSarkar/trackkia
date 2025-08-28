@@ -1,0 +1,25 @@
+.navbarBrandTextDarkStyle {
+  color: var(--navbar-brand-text);
+}
+
+.navbarOffcanvasDarkStyle {
+  background-color: var(--navbar-offcanvas-background);
+  color: var(--navbar-offcanvas-header);
+}
+
+.navbarToggleBtnDarkStyle, .navbarThemeBtnDarkMode {
+  color: var(--navbar-toggle-btn);
+}
+
+.footerTextDarkStyle {
+  color: var(--footer-text);
+}
+
+.bodyStyle {
+  height: calc(100vh - 94px);
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
+  top: 62px;
+}

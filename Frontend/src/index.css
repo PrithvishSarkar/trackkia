@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* ==================
+  Layout Navigation Bar
+  ================== */
+  --navbar-brand-text: #f97316;
+  --navbar-toggle-btn: #ddd;
+  --navbar-offcanvas-background: #333;
+  --navbar-offcanvas-header: #ddd;
+  --footer-text: #aaa;
+
+  /* ====================
+  Landing Page Components
+  ==================== */
+  --landing-title: #06b6d4;
+  --landing-description: #7dd3fc;
+  
+  /* =================
+  Not Found Components
+  ================= */
+  --not-found-title: #ef4444;
+  --not-found-description: #8b5cf6;
+}

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:opsz@18..144&family=Story+Script&display=swap');
+
+.title {
+  font-family: "Merriweather", sans-serif;
+  font-weight: 400;
+}
+
+.titleDarkStyle {
+  color: var(--landing-title);
+}
+
+.description {
+  font-family: "Story Script", sans-serif;
+  font-weight: 400;
+}
+
+.descriptionDarkStyle {
+  color: var(--landing-description);
+}
+
+.linkStyle {
+  text-decoration: none;
+  margin-inline: 1rem;
+  padding: 0.25rem 1rem 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  border-radius: 9999px;
+}
+
+.imageContainer {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .imageContainer {
+    display: block;
+  }
+}
