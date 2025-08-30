@@ -8,6 +8,8 @@ import AddTasksPage from "./Pages/TaskPages/AddTasksPage.tsx";
 import AllTasksPage from "./Pages/TaskPages/AllTasksPage.tsx";
 import AnalyticsPage from "./Pages/TaskPages/AnalyticsPage.tsx";
 import NotFoundPage from "./Pages/StaticPages/NotFoundPage.tsx";
+import { ToastContainer } from "react-toastify";
+
 const App = () => {
   const { theme } = useThemeContext();
   React.useEffect(() => {
@@ -25,6 +27,7 @@ const App = () => {
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
+      <ToastContainer />
     </div>
   );
 };

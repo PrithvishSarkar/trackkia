@@ -25,4 +25,13 @@
   ================= */
   --not-found-title: #ef4444;
   --not-found-description: #8b5cf6;
+
+  /* =================
+  Register Page Components
+  ================= */
+  --input-group-text: #ccfbf1;
+  --form-input-bg: transparent;
+  --form-input-text: #0d6efd;
+  --form-input-focus-bg: transparent;
+  --form-redirect-enquiry-text: #6c757d;
 }
