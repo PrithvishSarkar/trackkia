@@ -9,11 +9,16 @@ const AddTasksBody = ({ use }: { use: "add" | "edit" }) => {
 
   return (
     <main
-      className={`px-3 py-1 h-100 overflow-auto d-flex flex-column align-items-stretch justify-content-center fw-semibold ${
-        styles.title
-      } ${isThemeDark && styles.titleDarkStyle}`}
+      className={`px-3 py-1 h-100 overflow-auto 
+        d-flex flex-column align-items-stretch justify-content-center gap-4`}
     >
-      <header className="align-self-center">What's your plan today?</header>
+      <header
+        className={`${styles.title} fw-semibold align-self-center ${
+          isThemeDark && styles.titleDarkStyle
+        }`}
+      >
+        What's your plan today?
+      </header>
       <AddTasksForm isThemeDark={isThemeDark} use={use} />
     </main>
   );

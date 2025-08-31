@@ -7,16 +7,22 @@ const handleAddTaskFormSubmit = async (
   use: "add" | "edit",
   title: string,
   description: string,
-  priority: string,
+  priority: string | "Low Priority" | "Medium Priority" | "High Priority",
   deadline: string,
-  dispatch: AppDispatch,
+  dispatch: AppDispatch
 ) => {
   e.preventDefault();
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const ADD_TASK_PATH = import.meta.env.VITE_ADD_TASK_PATH;
-  const EDIT_TASK_PATH = import.meta.env.VITE_EDIT_TASK_PATH;
-  const API_CALL_URL =
-    BACKEND_URL + (use === "add" ? ADD_TASK_PATH : EDIT_TASK_PATH);
+
+  // Check if all the inputs are correct or not.
+  if (
+    !title.trim() ||
+    !description.trim() ||
+    priority === "--SELECT--" ||
+    !deadline.trim()
+  ) {
+    toast.warn("Invalid Input. \nPlease fill all the fields properly!");
+    return;
+  }
 
   // Converting today's date into appropriate string.
   const date: Date = new Date();
@@ -31,6 +37,20 @@ const handleAddTaskFormSubmit = async (
       else return ele.padStart(2, "0");
     })
     .join("-");
+
+  // Check if Starting Date is less than Deadline or not.
+  const dateDifference =
+    new Date(deadline).getTime() - new Date(startingDate).getTime();
+  if (dateDifference < 0) {
+    toast.warn("Deadline must be later than Starting Date.");
+    return;
+  }
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const ADD_TASK_PATH = import.meta.env.VITE_ADD_TASK_PATH;
+  const EDIT_TASK_PATH = import.meta.env.VITE_EDIT_TASK_PATH;
+  const API_CALL_URL =
+    BACKEND_URL + (use === "add" ? ADD_TASK_PATH : EDIT_TASK_PATH);
 
   // Making API call to Backend.
   const response = await (

@@ -46,18 +46,23 @@ const addNewTaskController = async (req: Request, res: Response) => {
   }
 
   // Add to Database.
-  const result = await db.insert(tasks).values({
-    title,
-    description,
-    priority,
-    userId,
-    startingDate: new Date(startingDate),
-    deadline: new Date(deadline),
-  });
-
-  res
-    .status(201)
-    .json({ status: "success", message: "Task Added Successfully!" });
+  try {
+    await db.insert(tasks).values({
+      title,
+      description,
+      priority,
+      userId,
+      startingDate: new Date(startingDate),
+      deadline: new Date(deadline),
+    });
+    res
+      .status(201)
+      .json({ status: "success", message: "Task Added Successfully!" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: "failure", message: "Problem Inserting Task!" });
+  }
 };
 
 export default addNewTaskController;

@@ -25,7 +25,7 @@ const AddTasksForm = ({
 
   return (
     <Form
-      className="d-flex flex-column align-stretch justify-content-center gap-4 flex-grow-1"
+      className="d-flex flex-column align-stretch justify-content-center gap-4"
       onSubmit={(e) =>
         handleAddTaskFormSubmit(
           e,
@@ -49,6 +49,7 @@ const AddTasksForm = ({
         </InputGroup.Text>
         <Form.Control
           type="text"
+          maxLength={25}
           required
           className={`${styles.formInput} text-primary ${
             isThemeDark && styles.formInputDarkStyle
@@ -71,6 +72,7 @@ const AddTasksForm = ({
         <Form.Control
           as="textarea"
           required
+          maxLength={100}
           className={`${styles.formInput} text-primary ${
             isThemeDark && styles.formInputDarkStyle
           }`}
