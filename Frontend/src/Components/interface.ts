@@ -1,1 +1,0 @@
-// Contains only the Interfaces for TypeScript.

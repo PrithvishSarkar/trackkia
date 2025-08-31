@@ -11,9 +11,7 @@ const registerController = async (req: Request, res: Response) => {
     email: string;
     password: string;
   }
-  console.log(req.body);
   const { name, email, password } = req.body as RequestBodyType;
-  console.log("name: ", name, " email: ", email, " password: ", password);
 
   // Check if the credentials are correct or not.
   if (!name.trim() || !email.trim() || !password.trim()) {

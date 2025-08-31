@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authFormReducer from "./reduxSlices/authFormSlice.js";
+import taskFormReducer from "./reduxSlices/taskFormSlice.js";
 
 const store = configureStore({
   reducer: {
-    authForm: authFormReducer
+    authForm: authFormReducer,
+    taskForm: taskFormReducer,
   }
 });
 

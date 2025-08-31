@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Epunda+Slab:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libertinus+Serif+Display&display=swap');
+
+.title {
+  font-family: "Libertinus Serif Display", system-ui;
+  font-size: 2.5rem;
+  background-image: linear-gradient(to right, #3730a3, #075985);
+  background-repeat: no-repeat;
+  background-clip: text;
+  color: transparent;
+}
+
+.titleDarkStyle {
+  background-image: linear-gradient(to right, #e9d5ff, #a855f7);
+}
+
+.formInput {
+  font-family: "Epunda Slab", serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  &::placeholder {
+    opacity: 0.5;
+  }
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+}
+
+.formInputDarkStyle {
+  background-color: var(--form-input-bg);
+  &::placeholder {
+    color: #6c757d;
+  }
+  &:focus {
+    background-color: var(--form-input-focus-bg);
+  }
+  &::-webkit-calendar-picker-indicator {
+    background-color: #333;
+  }
+}
+
+.inputGroupText {
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.inputGroupTextDarkStyle {
+  background-color: var(--input-group-text);
+}
