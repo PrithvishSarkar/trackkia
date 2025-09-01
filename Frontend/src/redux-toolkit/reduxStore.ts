@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authFormReducer from "./reduxSlices/authFormSlice.js";
 import taskFormReducer from "./reduxSlices/taskFormSlice.js";
+import taskListReducer from "./reduxSlices/getTasksSlice.js";
 
 const store = configureStore({
   reducer: {
     authForm: authFormReducer,
     taskForm: taskFormReducer,
+    taskList: taskListReducer,
   }
 });
 
