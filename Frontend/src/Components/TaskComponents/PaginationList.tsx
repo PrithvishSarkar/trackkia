@@ -19,7 +19,7 @@ const PaginationList = ({ taskListLength }: { taskListLength: number }) => {
   return (
     <Container
       fluid
-      className="d-md-flex align-items-center justify-content-between gap-2 my-3"
+      className="d-md-flex align-items-center justify-content-between gap-2 py-3"
     >
       <Pagination
         size="lg"

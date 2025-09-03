@@ -47,6 +47,7 @@ const AddTasksPage = () => {
               Task Preview
             </header>
             <TaskCard
+              id={0}
               title={title}
               description={description}
               priority={priority}

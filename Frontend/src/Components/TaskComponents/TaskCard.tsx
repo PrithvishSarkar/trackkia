@@ -1,24 +1,42 @@
 import { Button, Card, Row, Col, Badge } from "react-bootstrap";
 import { BsAlarm } from "react-icons/bs";
 import { FaClockRotateLeft } from "react-icons/fa6";
+import handleDeleteTask from "../../helperFunctions/deleteTask.js";
+import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
+import { useDispatch, useSelector } from "react-redux";
+import type React from "react";
 
 interface TaskCardPropType {
+  id: number;
   title: string;
   description: string;
   priority: string | "Low Priority" | "Medium Priority" | "High Priority";
   startingDate: string;
   deadline: string;
   preview: boolean;
+  setShowEditModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditTaskId?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const TaskCard = ({
+  id,
   title,
   description,
   priority,
   startingDate,
   deadline,
   preview,
+  setShowEditModal,
+  setEditTaskId,
 }: TaskCardPropType) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { taskList } = useSelector((state: RootState) => state.taskList);
+
+  const handleEdit = (id: number) => {
+    setShowEditModal !== undefined && setShowEditModal(true);
+    setEditTaskId !== undefined && setEditTaskId(id);
+  };
+
   return (
     <Card
       style={{ backgroundColor: "#fffbeb" }}
@@ -36,9 +54,8 @@ const TaskCard = ({
           <Col xs={6}>
             {[startingDate, deadline].map((ele, index) => (
               <Card.Subtitle
-                className={`my-1 d-flex align-items-center justify-content-start gap-2 text-${
-                  index === 0 ? "primary" : "danger"
-                }`}
+                className={`my-1 d-flex align-items-center justify-content-start gap-2 
+                  text-${index === 0 ? "primary" : "danger"}`}
                 style={{ fontSize: "1.125rem" }}
               >
                 {index === 0 ? <FaClockRotateLeft /> : <BsAlarm />}
@@ -64,12 +81,18 @@ const TaskCard = ({
         </Card.Text>
 
         <Row>
-          {["Edit Task", "Delete Task"].map((ele, index) => (
+          {["Edit Task", "Delete Task"].map((ele: string, index: number) => (
             <Col>
               <Button
                 variant={index === 0 ? "success" : "danger"}
                 className="w-100 fw-semibold"
                 disabled={preview}
+                onClick={() => {
+                  index === 0 && ele === "Edit Task" && handleEdit(id);
+                  index === 1 &&
+                    ele === "Delete Task" &&
+                    handleDeleteTask(id, dispatch, taskList);
+                }}
               >
                 {ele}
               </Button>

@@ -9,32 +9,37 @@ import {
   setPriority,
   setDeadline,
 } from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
-import handleAddTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js";
+import handleAddEditTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js";
 
-const AddTasksForm = ({
+const AddEditTaskForm = ({
   isThemeDark,
   use,
+  taskId, // Required only to edit tasks.
 }: {
   isThemeDark: boolean;
   use: "add" | "edit";
+  taskId?: number;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { title, description, priority, deadline } = useSelector(
     (state: RootState) => state.taskForm
   );
+  const { taskList } = useSelector((state: RootState) => state.taskList);
 
   return (
     <Form
       className="d-flex flex-column align-stretch justify-content-center gap-4"
       onSubmit={(e) =>
-        handleAddTaskFormSubmit(
+        handleAddEditTaskFormSubmit(
           e,
           use,
           title,
           description,
           priority,
           deadline,
-          dispatch
+          dispatch,
+          taskId,
+          taskList,
         )
       }
     >
@@ -151,4 +156,4 @@ const AddTasksForm = ({
   );
 };
 
-export default AddTasksForm;
+export default AddEditTaskForm;

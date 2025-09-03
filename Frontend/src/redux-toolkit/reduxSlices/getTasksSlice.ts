@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface TaskType {
+  id: number;
   title: string;
   description: string;
   priority: "Low Priority" | "Medium Priority" | "High Priority";

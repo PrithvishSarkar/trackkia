@@ -1,5 +1,5 @@
 // import React from 'react'
-import AddTasksForm from "./AddTasksForm.tsx";
+import AddEditTasksForm from "./AddEditTasksForm.tsx";
 import styles from "../../Components/cssModules/taskForm.module.css";
 import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
 
@@ -19,7 +19,7 @@ const AddTasksBody = ({ use }: { use: "add" | "edit" }) => {
       >
         What's your plan today?
       </header>
-      <AddTasksForm isThemeDark={isThemeDark} use={use} />
+      <AddEditTasksForm isThemeDark={isThemeDark} use={use} />
     </main>
   );
 };

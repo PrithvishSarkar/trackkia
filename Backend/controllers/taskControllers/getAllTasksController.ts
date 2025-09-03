@@ -20,6 +20,7 @@ const getAllTasksController = async (req: Request, res: Response) => {
   try {
     // Extracting task list from Database using user's ID.
     interface taskListType {
+      id: number;
       title: string;
       description: string;
       priority: "Low Priority" | "Medium Priority" | "High Priority";
@@ -28,13 +29,14 @@ const getAllTasksController = async (req: Request, res: Response) => {
       deadline: Date;
     }
     const requiredFields = {
+      id: tasks.id,
       title: tasks.title,
       description: tasks.description,
       priority: tasks.priority,
       status: tasks.status,
       startingDate: tasks.startingDate,
       deadline: tasks.deadline,
-    };
+    }
     const taskArray: taskListType[] = await db
       .select(requiredFields)
       .from(tasks)
