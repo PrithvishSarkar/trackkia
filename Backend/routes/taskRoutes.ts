@@ -2,6 +2,7 @@ import express from "express";
 import addNewTaskController from "../controllers/taskControllers/addNewTaskController.js";
 import getAllTasksController from "../controllers/taskControllers/getAllTasksController.js";
 import editTaskController from "../controllers/taskControllers/editTaskController.js";
+import editStatusController from "../controllers/taskControllers/editStatusController.js";
 import deleteTaskController from "../controllers/taskControllers/deleteTaskController.js";
 import { protectedRouteMiddleware } from "../middleware.js";
 
@@ -12,6 +13,7 @@ router.post("/add-task", protectedRouteMiddleware, addNewTaskController);
 router.get("/all-tasks", protectedRouteMiddleware, getAllTasksController);
 // router.get("/analytics", protectedRouteMiddleware, getAnalyticsController);
 router.patch("/edit-task/:id", editTaskController);
+router.patch("/edit-status/:id", editStatusController);
 router.delete("/delete-task/:id", deleteTaskController);
 
 export default router;

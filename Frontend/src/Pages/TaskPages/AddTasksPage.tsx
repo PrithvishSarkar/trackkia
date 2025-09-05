@@ -51,6 +51,7 @@ const AddTasksPage = () => {
               title={title}
               description={description}
               priority={priority}
+              status="Pending"
               startingDate={startingDate}
               deadline={deadline}
               preview={true}

@@ -58,12 +58,13 @@ const AllTasksPage = () => {
           const startingDate = dateToString(task.startingDate);
           const deadline = dateToString(task.deadline);
           return (
-            <Col xs={12} md={6} lg={4} id={index} className="py-2">
+            <Col xs={12} md={6} lg={4} key={index} className="py-2">
               <TaskCard
                 id={task.id}
                 title={task.title}
                 description={task.description}
                 priority={task.priority}
+                status={task.status}
                 startingDate={startingDate}
                 deadline={deadline}
                 preview={false}

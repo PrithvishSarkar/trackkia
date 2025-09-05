@@ -8,7 +8,6 @@ const PaginationList = ({ taskListLength }: { taskListLength: number }) => {
   const { totalTasks, totalPages, pageNumber } = useSelector(
     (state: RootState) => state.taskList
   );
-  console.log(pageNumber);
   /*
   totalPages --> Number of Pagination Items.
   pageNumber --> Pagination Active Link.
@@ -27,7 +26,7 @@ const PaginationList = ({ taskListLength }: { taskListLength: number }) => {
       >
         {paginationItems.map((page, index) => (
           <Pagination.Item
-            id={index}
+            key={index}
             active={page === pageNumber}
             onClick={() => fetchTasksList(page, dispatch)}
           >

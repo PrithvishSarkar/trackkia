@@ -36,7 +36,8 @@
   --form-redirect-enquiry-text: #6c757d;
 
   /* =================
-  Add Tasks Page Components
+  Task Cark Components
   ================= */
-  
+  --text-light-color: #4338ca;
+  --text-dark-color: #f97316;
 }
