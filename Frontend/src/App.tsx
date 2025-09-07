@@ -11,6 +11,14 @@ import NotFoundPage from "./Pages/StaticPages/NotFoundPage.tsx";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
+  /*
+  React.useEffect(() => {
+    // Page Access Restrictions based on Authentication.
+    // Redirect user to Login Page if he's not authenticated.
+    // Redirect user to Protected Pages if he's authenticated.
+  }, []);
+  */
+
   const { theme } = useThemeContext();
   React.useEffect(() => {
     document.body.style.backgroundColor = theme === "light" ? "white" : "black";

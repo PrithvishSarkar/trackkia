@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const addNewTaskController = async (req: Request, res: Response) => {
+const addTaskController = async (req: Request, res: Response) => {
   const userId = req.userId;
 
   interface RequestBodyType {
@@ -65,4 +65,4 @@ const addNewTaskController = async (req: Request, res: Response) => {
   }
 };
 
-export default addNewTaskController;
+export default addTaskController;
