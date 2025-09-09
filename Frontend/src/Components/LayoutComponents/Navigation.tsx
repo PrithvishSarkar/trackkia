@@ -53,7 +53,7 @@ const NavbarComponent = () => {
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel">
-                <span className="p-2 border-0 bg-danger text-light fst-bold rounded-pill">
+                <span className="p-2 bg-danger text-light fw-bold rounded-pill">
                   {initials}
                 </span>{" "}
                 <span>{userName.split(" ")[0]}</span>
@@ -112,6 +112,12 @@ const NavbarComponent = () => {
           >
             <FaBarsStaggered />
           </Navbar.Toggle>
+          <span
+            className={`d-none d-lg-inline px-1 me-2 bg-danger text-light 
+              fw-bold rounded-pill`}
+          >
+            {initials}
+          </span>
           {theme === "light" ? (
             <MdLightMode role="button" onClick={() => setTheme("dark")} />
           ) : (
