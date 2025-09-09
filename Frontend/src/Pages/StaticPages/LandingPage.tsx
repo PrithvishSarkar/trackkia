@@ -4,10 +4,15 @@ import Layout from "../../Components/LayoutComponents/Layout.tsx";
 import { Link } from "react-router";
 import { MdOutlineLogin } from "react-icons/md";
 import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import { useUserNameContext } from "../../ContextAPI/UserNameContext.tsx";
 
 const LandingPage = () => {
   const { theme } = useThemeContext();
   const isThemeDark: boolean = theme === "dark";
+
+  const { userName } = useUserNameContext();
+  const isAuthenticated: boolean = userName !== "";
+  
   return (
     <Layout>
       <Row className="h-100 overflow-auto">
@@ -15,7 +20,8 @@ const LandingPage = () => {
           <Container
             fluid
             style={{ userSelect: "none" }}
-            className="h-100 overflow-auto d-flex flex-column justify-content-center align-items-start gap-5"
+            className={`h-100 overflow-auto d-flex flex-column justify-content-center 
+              align-items-start gap-5`}
           >
             <p
               className="border border-secondary rounded-pill px-3 text-secondary"
@@ -44,20 +50,22 @@ const LandingPage = () => {
               Take control of your tasks and boost your productivity with our
               intuitive Task Manager
             </p>
-            <div>
-              <Link
-                to="/login"
-                className={`${styles.linkStyle} bg-primary text-light`}
-              >
-                Login <MdOutlineLogin />
-              </Link>
-              <Link
-                to="/register"
-                className={`${styles.linkStyle} text-primary`}
-              >
-                Register <MdOutlineLogin />
-              </Link>
-            </div>
+            {!isAuthenticated && (
+              <div>
+                <Link
+                  to="/login"
+                  className={`${styles.linkStyle} bg-primary text-light`}
+                >
+                  Login <MdOutlineLogin />
+                </Link>
+                <Link
+                  to="/register"
+                  className={`${styles.linkStyle} text-primary`}
+                >
+                  Register <MdOutlineLogin />
+                </Link>
+              </div>
+            )}
           </Container>
         </Col>
         <Col lg={6} className={styles.imageContainer}>

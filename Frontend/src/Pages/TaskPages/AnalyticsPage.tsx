@@ -26,24 +26,26 @@ const AnalyticsPage = () => {
 
   return (
     <Layout>
-      <Row className="h-100 overflow-auto">
-        <Col xs={12} lg={6}>
-          <AnalyticsChart
-            title="Task Status"
-            analyticsArray={statusAnalytics}
-            totalTasks={totalTasks}
-            innerRadius={innerRadius}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
-          <AnalyticsChart
-            title="Task Priority"
-            analyticsArray={priorityAnalytics}
-            totalTasks={totalTasks}
-            innerRadius={innerRadius}
-          />
-        </Col>
-      </Row>
+      {statusAnalytics && priorityAnalytics && (
+        <Row className="h-100 overflow-auto">
+          <Col xs={12} lg={6}>
+            <AnalyticsChart
+              title="Task Status"
+              analyticsArray={statusAnalytics}
+              totalTasks={totalTasks}
+              innerRadius={innerRadius}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <AnalyticsChart
+              title="Task Priority"
+              analyticsArray={priorityAnalytics}
+              totalTasks={totalTasks}
+              innerRadius={innerRadius}
+            />
+          </Col>
+        </Row>
+      )}
     </Layout>
   );
 };

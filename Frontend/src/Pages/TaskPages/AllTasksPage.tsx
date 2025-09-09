@@ -54,30 +54,31 @@ const AllTasksPage = () => {
 
       {/* Display Task List */}
       <Row className="px-2">
-        {taskList.map((task, index) => {
-          const startingDate = dateToString(task.startingDate);
-          const deadline = dateToString(task.deadline);
-          return (
-            <Col xs={12} md={6} lg={4} key={index} className="py-2">
-              <TaskCard
-                id={task.id}
-                title={task.title}
-                description={task.description}
-                priority={task.priority}
-                status={task.status}
-                startingDate={startingDate}
-                deadline={deadline}
-                preview={false}
-                setShowEditModal={setShowEditModal}
-                setEditTaskId={setEditTaskId}
-              />
-            </Col>
-          );
-        })}
+        {taskList &&
+          taskList.map((task, index) => {
+            const startingDate = dateToString(task.startingDate);
+            const deadline = dateToString(task.deadline);
+            return (
+              <Col xs={12} md={6} lg={4} key={index} className="py-2">
+                <TaskCard
+                  id={task.id}
+                  title={task.title}
+                  description={task.description}
+                  priority={task.priority}
+                  status={task.status}
+                  startingDate={startingDate}
+                  deadline={deadline}
+                  preview={false}
+                  setShowEditModal={setShowEditModal}
+                  setEditTaskId={setEditTaskId}
+                />
+              </Col>
+            );
+          })}
       </Row>
 
       {/* Navigation using Pagination */}
-      <PaginationList taskListLength={taskList.length} />
+      {taskList && <PaginationList taskListLength={taskList.length} />}
     </Layout>
   );
 };

@@ -16,14 +16,14 @@ import type { RootState, AppDispatch } from "../../redux-toolkit/reduxStore.js";
 import { useNavigate } from "react-router";
 import handleSubmit from "../../helperFunctions/authFormSubmit.js";
 import authFormPwdStrength from "../../helperFunctions/authFormPwdStrength.js";
+import { useUserNameContext } from "../../ContextAPI/UserNameContext.jsx";
 
-const AuthForm = ({
-  isRoleRegister,
-  isThemeDark,
-}: {
+interface AuthFormParametersType {
   isRoleRegister: boolean;
   isThemeDark: boolean;
-}) => {
+}
+
+const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormParametersType) => {
   /*========================
   Redux Toolkit Hooks Starts
   ========================*/
@@ -47,6 +47,8 @@ const AuthForm = ({
 
   const navigate = useNavigate(); // Programmatically navigating to another route.
 
+  const { setUserName } = useUserNameContext();
+
   const formLabelStyle = "fw-bold fst-italic fs-5 text-secondary";
 
   return (
@@ -60,7 +62,8 @@ const AuthForm = ({
           email,
           password,
           dispatch,
-          navigate
+          navigate,
+          setUserName
         )
       }
     >
@@ -79,6 +82,7 @@ const AuthForm = ({
               value={name}
               onChange={(e) => dispatch(setName(e.target.value))}
               placeholder="Sanjay Prasad"
+              maxLength={30}
               required
               className={`${styles.formInput} text-success ${
                 isThemeDark && styles.formInputDarkStyle
@@ -103,6 +107,7 @@ const AuthForm = ({
             onChange={(e) => dispatch(setEmail(e.target.value))}
             placeholder="something@example.com"
             required
+            maxLength={50}
             className={`${styles.formInput} text-success ${
               isThemeDark && styles.formInputDarkStyle
             }`}
@@ -124,6 +129,7 @@ const AuthForm = ({
             value={password}
             onChange={(e) => dispatch(setPassword(e.target.value))}
             required
+            maxLength={30}
             className={`${styles.formInput} text-success ${
               isThemeDark && styles.formInputDarkStyle
             }`}
@@ -145,7 +151,7 @@ const AuthForm = ({
             )}
           </InputGroup.Text>
         </InputGroup>
-        {(showPasswordStrength && isRoleRegister) && (
+        {showPasswordStrength && isRoleRegister && (
           <small className={`d-block text-end text-${passwordStrengthColor}`}>
             {passwordStrength}
           </small>

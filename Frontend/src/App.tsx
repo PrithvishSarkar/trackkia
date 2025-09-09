@@ -9,17 +9,27 @@ import AllTasksPage from "./Pages/TaskPages/AllTasksPage.tsx";
 import AnalyticsPage from "./Pages/TaskPages/AnalyticsPage.tsx";
 import NotFoundPage from "./Pages/StaticPages/NotFoundPage.tsx";
 import { ToastContainer } from "react-toastify";
+import fetchUserName from "./helperFunctions/fetchUserName.js";
+import pathRedirect from "./helperFunctions/pathRedirect.js";
+import { useUserNameContext } from "./ContextAPI/UserNameContext.tsx";
+import { useLocation, useNavigate } from "react-router";
 
 const App = () => {
-  /*
-  React.useEffect(() => {
-    // Page Access Restrictions based on Authentication.
-    // Redirect user to Login Page if he's not authenticated.
-    // Redirect user to Protected Pages if he's authenticated.
-  }, []);
-  */
-
+  const { userName, setUserName } = useUserNameContext();
   const { theme } = useThemeContext();
+  const { pathname }: { pathname: string } = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    fetchUserName(setUserName);
+  }, []);
+
+  React.useEffect(() => {
+    let isAuthenticated: boolean = userName !== "";
+    pathRedirect(pathname, isAuthenticated, navigate);
+    return () => { isAuthenticated = false };
+  }, [userName]);
+
   React.useEffect(() => {
     document.body.style.backgroundColor = theme === "light" ? "white" : "black";
   }, [theme]);
@@ -27,8 +37,8 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<LandingPage />} />
-        <Route path='/login' element={<LoginPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/add-tasks" element={<AddTasksPage />} />
         <Route path="/all-tasks" element={<AllTasksPage />} />

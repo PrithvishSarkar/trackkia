@@ -2,6 +2,7 @@ import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
 import { reset } from "../redux-toolkit/reduxSlices/authFormSlice.js";
 import { toast } from "react-toastify";
 import type { NavigateFunction } from "react-router";
+import type React from "react";
 
 const handleAuthFormSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
@@ -10,7 +11,8 @@ const handleAuthFormSubmit = async (
   email: string,
   password: string,
   dispatch: AppDispatch,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  setUserName: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   e.preventDefault();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -35,12 +37,14 @@ const handleAuthFormSubmit = async (
     switch (response.status) {
       case "failure":
         toast.error(response.message);
+        setUserName("");
         break;
       case "success":
         toast.success(response.message);
         setTimeout(() => {
           navigate("/add-tasks");
         }, 0);
+        setUserName(response.userName);
         break;
       default:
         break;
