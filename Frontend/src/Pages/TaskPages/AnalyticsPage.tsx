@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container, Image } from "react-bootstrap";
 import Layout from "../../Components/LayoutComponents/Layout.tsx";
 import AnalyticsChart from "../../Components/TaskComponents/AnalyticsChart.tsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,7 @@ const AnalyticsPage = () => {
 
   return (
     <Layout>
+      {/* Display Analytics as Pie Charts provided that analytics data is present */}
       {statusAnalytics && priorityAnalytics && (
         <Row className="h-100 overflow-auto">
           <Col xs={12} lg={6}>
@@ -45,6 +46,16 @@ const AnalyticsPage = () => {
             />
           </Col>
         </Row>
+      )}
+
+      {/* 404 Not Found to be displayed when there's no analytics data present */}
+      {(!statusAnalytics || !priorityAnalytics) && (
+        <Container
+          fluid
+          className="h-100 overflow-hidden d-flex align-items-center justify-content-center"
+        >
+          <Image src="/not-found-image-transparent.png" alt="Not Found Image" />
+        </Container>
       )}
     </Layout>
   );

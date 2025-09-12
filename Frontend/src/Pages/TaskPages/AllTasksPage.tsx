@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Modal } from "react-bootstrap";
+import { Row, Col, Modal, Image, Container } from "react-bootstrap";
 import TaskCard from "../../Components/TaskComponents/TaskCard.tsx";
 import Layout from "../../Components/LayoutComponents/Layout.tsx";
 import PaginationList from "../../Components/TaskComponents/PaginationList.tsx";
@@ -52,7 +52,7 @@ const AllTasksPage = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Display Task List */}
+      {/* Display Task List - provided it exists */}
       <Row className="px-2">
         {taskList &&
           taskList.map((task, index) => {
@@ -79,6 +79,20 @@ const AllTasksPage = () => {
 
       {/* Navigation using Pagination */}
       {taskList && <PaginationList taskListLength={taskList.length} />}
+
+      {/* 404 Not Found to be displayed when there's no task list data */}
+      {!taskList && (
+        <Container
+          fluid
+          className="h-100 overflow-hidden d-flex align-items-center justify-content-center"
+        >
+          <Image
+            fluid
+            src="/not-found-image-transparent.png"
+            alt="Not Found Image"
+          />
+        </Container>
+      )}
     </Layout>
   );
 };

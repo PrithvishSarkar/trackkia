@@ -11,15 +11,17 @@ import {
 } from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
 import handleAddEditTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js";
 
-const AddEditTaskForm = ({
-  isThemeDark,
-  use,
-  taskId, // Required only to edit tasks.
-}: {
+interface AddTasksPageParametersType {
   isThemeDark: boolean;
   use: "add" | "edit";
   taskId?: number;
-}) => {
+}
+
+const AddEditTaskForm = ({
+  isThemeDark,
+  use,
+  taskId,
+}: AddTasksPageParametersType) => {
   const dispatch = useDispatch<AppDispatch>();
   const { title, description, priority, deadline } = useSelector(
     (state: RootState) => state.taskForm
@@ -39,7 +41,7 @@ const AddEditTaskForm = ({
           deadline,
           dispatch,
           taskId,
-          taskList,
+          taskList
         )
       }
     >

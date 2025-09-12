@@ -12,6 +12,7 @@ const fetchTasksList = async (page: number, dispatch: AppDispatch) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const ALL_TASKS_PATH = import.meta.env.VITE_ALL_TASK_PATH;
   const API_CALL_URL = BACKEND_URL + ALL_TASKS_PATH + `?page=${page}`;
+  
   const response = await (
     await fetch(API_CALL_URL, {
       method: "GET",
