@@ -39,9 +39,10 @@ const sendOTP = async (
     res.status(200).json({
       status: "success",
       message: `OTP Sent. \nPlease check your email!`,
-      userId
+      userId,
     });
   } catch (err) {
+    console.error("OTP Sending Error: ", err.message);
     res
       .status(500)
       .json({ status: "failure", message: "Problem Sending OTP!" });
@@ -50,7 +51,7 @@ const sendOTP = async (
 };
 
 const sendOtpController = async (req: Request, res: Response) => {
-  const { email }: { email: string } = req.body;
+  const email: string = req.body;
 
   // Checking if the email is valid or not.
   if (!email.trim()) {
@@ -74,20 +75,22 @@ const sendOtpController = async (req: Request, res: Response) => {
       });
       return;
     }
-    // If user found, then generate OTP and save to Database.
-    const { id: userId }: { id: number } = userDataArray[0];
-    const OTP: string = generateOTP();
+    // If user found, check if OTP already sent.
     // If OTP for the given user already exists, then send a warning.
-    const [{ count }] = await db
+    const { id: userId }: { id: number } = userDataArray[0];
+    const countOtps = await db
       .select({ count: sql<number>`COUNT(*)` })
       .from(otps)
       .where(eq(otps.userId, userId));
-    if (count > 0) {
-      res.status(400).json({ status: "failure", message: "OTP already sent!" });
+    if (countOtps.length && countOtps[0].count > 0) {
+      res
+        .status(400)
+        .json({ status: "failure", message: "OTP already sent!", userId });
       return;
     }
 
     // Hash the generated OTP and store it in Database.
+    const OTP: string = generateOTP();
     const hashedOTP: string = await bcrypt.hash(OTP, 10);
     await db.insert(otps).values({
       otp: hashedOTP,
