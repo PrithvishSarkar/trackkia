@@ -50,7 +50,7 @@ const resetPasswordController = async (req: Request, res: Response) => {
       status: "success",
       message: "Password Reset Successfully!",
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Password Reset Error: ", err.message);
     res
       .status(500)

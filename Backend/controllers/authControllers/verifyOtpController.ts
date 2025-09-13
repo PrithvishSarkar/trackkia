@@ -55,7 +55,7 @@ const verifyOtpController = async (req: Request, res: Response) => {
     res
       .status(200)
       .json({ status: "success", message: "OTP Verified Successfully!" });
-  } catch (err) {
+  } catch (err: any) {
     console.error("OTP Verification Error: ", err.message);
     res.status(500).json({
       status: "failure",

@@ -9,12 +9,12 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const generateOTP = () => {
+export const generateOTP = () => {
   const OTP: string = crypto.randomInt(1000, 9999).toString();
   return OTP;
 };
 
-const sendOTP = async (
+export const sendOTP = async (
   email: string,
   OTP: string,
   res: Response,
@@ -41,7 +41,7 @@ const sendOTP = async (
       message: `OTP Sent. \nPlease check your email!`,
       userId,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("OTP Sending Error: ", err.message);
     res
       .status(500)
@@ -100,7 +100,7 @@ const sendOtpController = async (req: Request, res: Response) => {
 
     // Sending OTP to user via email.
     sendOTP(email, OTP, res, userId);
-  } catch (err) {
+  } catch (err: any) {
     console.error("OTP Sending or Database Error: ", err.message);
     res.status(500).json({
       status: "failure",

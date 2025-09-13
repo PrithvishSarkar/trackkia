@@ -25,7 +25,7 @@ const userNameController = async (req: Request, res: Response) => {
       message: "User Name Found Successfully!",
       userName: name,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res
       .status(500)

@@ -73,7 +73,7 @@ const registerController = async (req: Request, res: Response) => {
       message: "User Registered Successfully!",
       userName, // This will be stored in Client Side Local Storage.
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).json({
       status: "failure",

@@ -10,6 +10,7 @@ import {
   setOtp,
 } from "../../redux-toolkit/reduxSlices/forgotPasswordSlice.js";
 import handleSendOtp from "../../helperFunctions/sendOtp.js";
+import handleResendOtp from "../../helperFunctions/resendOtp.js";
 import handleVerifyOtp from "../../helperFunctions/verifyOtp.js";
 import handleHideForgotPwdModal from "../../helperFunctions/hideForgotPwdModal.js";
 
@@ -36,9 +37,7 @@ const PwdResetModal = () => {
       keyboard={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>
-          OTP Verification
-        </Modal.Title>
+        <Modal.Title>OTP Verification</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form className="d-flex flex-column align-items-stretch gap-3">
@@ -59,6 +58,7 @@ const PwdResetModal = () => {
                 onChange={(e) => dispatch(setEmail(e.target.value))}
                 placeholder="something@example.com"
                 required
+                disabled={userId !== -1}
                 maxLength={50}
                 className={`${styles.formInput} text-success ${
                   isThemeDark && styles.formInputDarkStyle
@@ -67,15 +67,25 @@ const PwdResetModal = () => {
             </InputGroup>
           </Form.Group>
 
-          {/* Send OTP Button */}
-          <Button
-            variant="success"
-            className="align-self-start"
-            onClick={() => handleSendOtp(email, dispatch)}
-            disabled={sendOtpBtnLoading}
-          >
-            Send OTP
-          </Button>
+          <section className="d-flex align-items-center justify-content-between">
+            {/* Send OTP Button */}
+            <Button
+              variant="success"
+              onClick={() => handleSendOtp(email, dispatch)}
+              disabled={sendOtpBtnLoading}
+            >
+              Send OTP
+            </Button>
+
+            {/* Resend OTP Button */}
+            <Button
+              variant="success"
+              disabled={userId === -1 || sendOtpBtnLoading}
+              onClick={() => handleResendOtp(dispatch, email, userId)}
+            >
+              Resend OTP
+            </Button>
+          </section>
 
           {/* Enter OTP Input */}
           <Form.Group controlId="otp">
