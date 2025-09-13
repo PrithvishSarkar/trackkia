@@ -9,17 +9,17 @@ import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
 import dateToString from "../../helperFunctions/dateToString.js";
 import AddEditTaskForm from "../../Components/TaskComponents/AddEditTasksForm.tsx";
 import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import { reset } from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
+import { setShowEditModal } from "../../redux-toolkit/reduxSlices/editTaskSlice.js";
 
 const AllTasksPage = () => {
-  const [showEditModal, setShowEditModal] = React.useState(false);
-  const [editTaskId, setEditTaskId] = React.useState(-1);
-
   const { theme } = useThemeContext();
   const isThemeDark = theme === "dark";
 
   const { pageNumber, taskList } = useSelector(
     (state: RootState) => state.taskList
   );
+  const { showEditModal } = useSelector((state: RootState) => state.editTask);
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
@@ -35,7 +35,10 @@ const AllTasksPage = () => {
         backdrop="static"
         keyboard={false}
         centered
-        onHide={() => setShowEditModal(false)}
+        onHide={() => {
+          dispatch(reset());
+          dispatch(setShowEditModal(false));
+        }}
       >
         <Modal.Header
           closeButton
@@ -44,17 +47,14 @@ const AllTasksPage = () => {
           <Modal.Title>Edit Task</Modal.Title>
         </Modal.Header>
         <Modal.Body className={`${isThemeDark && "bg-dark"}`}>
-          <AddEditTaskForm
-            isThemeDark={isThemeDark}
-            use="edit"
-            taskId={editTaskId}
-          />
+          <AddEditTaskForm isThemeDark={isThemeDark} use="edit" />
         </Modal.Body>
       </Modal>
 
       {/* Display Task List - provided it exists */}
       <Row className="px-2">
         {taskList &&
+          taskList.length > 0 &&
           taskList.map((task, index) => {
             const startingDate = dateToString(task.startingDate);
             const deadline = dateToString(task.deadline);
@@ -69,8 +69,6 @@ const AllTasksPage = () => {
                   startingDate={startingDate}
                   deadline={deadline}
                   preview={false}
-                  setShowEditModal={setShowEditModal}
-                  setEditTaskId={setEditTaskId}
                 />
               </Col>
             );
@@ -78,10 +76,12 @@ const AllTasksPage = () => {
       </Row>
 
       {/* Navigation using Pagination */}
-      {taskList && <PaginationList taskListLength={taskList.length} />}
+      {taskList && taskList.length > 0 && (
+        <PaginationList taskListLength={taskList.length} />
+      )}
 
       {/* 404 Not Found to be displayed when there's no task list data */}
-      {!taskList && (
+      {(!taskList || taskList.length === 0) && (
         <Container
           fluid
           className="h-100 overflow-hidden d-flex align-items-center justify-content-center"

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
 import { reset } from "../redux-toolkit/reduxSlices/taskFormSlice.js";
 import { setTaskList } from "../redux-toolkit/reduxSlices/getTasksSlice.js";
+import { setShowEditModal } from "../redux-toolkit/reduxSlices/editTaskSlice.js";
 import dateToString from "./dateToString.js";
 
 interface TaskType {
@@ -22,8 +23,8 @@ const handleAddEditTaskFormSubmit = async (
   priority: string | "Low Priority" | "Medium Priority" | "High Priority",
   deadline: string,
   dispatch: AppDispatch,
-  taskId?: number,
-  taskList?: TaskType[]
+  taskId: number,
+  taskList: TaskType[]
 ) => {
   e.preventDefault();
 
@@ -91,7 +92,7 @@ const handleAddEditTaskFormSubmit = async (
       break;
     case "success":
       toast.success(response.message);
-      // Below `if` statement will only work for `edit` task.
+      // Below `if` statement will only work for `edit` task to update edited task.
       if (response.updatedTask) {
         const startingDate = dateToString(response.updatedTask.startingDate);
         const deadline = dateToString(response.updatedTask.deadline);
@@ -99,29 +100,27 @@ const handleAddEditTaskFormSubmit = async (
           const updatedTaskList = taskList.map((task: TaskType) => {
             if (task.id === response.updatedTask.id) {
               interface UpdatedTaskDestructureType {
-                id: number;
                 title: string;
                 description: string;
                 priority: "Low Priority" | "Medium Priority" | "High Priority";
               }
               const {
-                id,
                 title,
                 description,
                 priority,
               }: UpdatedTaskDestructureType = response.updatedTask;
               return {
-                id,
+                ...task,
                 title,
                 description,
                 priority,
-                status: "Pending",
                 startingDate,
                 deadline,
-              } as TaskType;
+              };
             } else return task;
           });
           dispatch(setTaskList(updatedTaskList));
+          dispatch(setShowEditModal(false));
         }
       }
       break;

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "../cssModules/taskCard.module.css";
 import { Button, Card, Row, Col, Badge, Stack } from "react-bootstrap";
 import { BsAlarm } from "react-icons/bs";
@@ -6,6 +5,7 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useThemeContext } from "../../ContextAPI/ThemeContext.js";
+import handleEditTask from "../../helperFunctions/editTask.js";
 import handleDeleteTask from "../../helperFunctions/deleteTask.js";
 import handleTaskStatusChange from "../../helperFunctions/taskStatusChange.js";
 
@@ -18,8 +18,6 @@ interface TaskCardPropType {
   startingDate: string;
   deadline: string;
   preview: boolean;
-  setShowEditModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  setEditTaskId?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const TaskCard = ({
@@ -31,19 +29,12 @@ const TaskCard = ({
   startingDate,
   deadline,
   preview,
-  setShowEditModal,
-  setEditTaskId,
 }: TaskCardPropType) => {
   const { theme } = useThemeContext();
   const isThemeDark: boolean = theme === "dark";
 
   const dispatch = useDispatch<AppDispatch>();
   const { taskList } = useSelector((state: RootState) => state.taskList);
-
-  const handleEdit = (id: number) => {
-    setShowEditModal !== undefined && setShowEditModal(true);
-    setEditTaskId !== undefined && setEditTaskId(id);
-  };
 
   return (
     <Card
@@ -134,7 +125,7 @@ const TaskCard = ({
             const handleClick = () => {
               switch (btnText) {
                 case "Edit Task":
-                  return handleEdit(id);
+                  return handleEditTask(id, dispatch, taskList);
                 case "Delete Task":
                   return handleDeleteTask(id, dispatch, taskList);
                 default:

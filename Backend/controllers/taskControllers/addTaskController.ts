@@ -58,7 +58,8 @@ const addTaskController = async (req: Request, res: Response) => {
     res
       .status(201)
       .json({ status: "success", message: "Task Added Successfully!" });
-  } catch (err) {
+  } catch (err: any) {
+    console.error(err.message);
     res
       .status(500)
       .json({ status: "failure", message: "Problem Inserting Task!" });

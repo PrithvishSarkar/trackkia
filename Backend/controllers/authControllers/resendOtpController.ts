@@ -7,7 +7,6 @@ import bcrypt from "bcryptjs";
 
 const resendOtpController = async (req: Request, res: Response) => {
   const { email, userId }: { email: string; userId: number } = req.body;
-  console.log(email, userId);
 
   /*
   No need to check for valid email or verify user authenticity as it's already done

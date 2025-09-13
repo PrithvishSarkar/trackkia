@@ -19,7 +19,7 @@ const editStatusController = async (req: Request, res: Response) => {
       taskId,
       taskStatus,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Task Status Updation Error: ", err.message);
     res.status(500).json({
       status: "failure",

@@ -12,7 +12,7 @@ const deleteTaskController = async (req: Request, res: Response) => {
       message: "Task Deleted Successfully!",
       taskId, // This will be used in Frontend to update the task list.
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Task Deletion Error: ", err.message);
     res.status(500).json({
       status: "failure",

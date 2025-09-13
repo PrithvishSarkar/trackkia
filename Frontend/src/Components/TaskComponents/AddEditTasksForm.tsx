@@ -14,18 +14,17 @@ import handleAddEditTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js
 interface AddTasksPageParametersType {
   isThemeDark: boolean;
   use: "add" | "edit";
-  taskId?: number;
 }
 
 const AddEditTaskForm = ({
   isThemeDark,
   use,
-  taskId,
 }: AddTasksPageParametersType) => {
   const dispatch = useDispatch<AppDispatch>();
   const { title, description, priority, deadline } = useSelector(
     (state: RootState) => state.taskForm
   );
+  const { taskId } = useSelector((state: RootState) => state.editTask);
   const { taskList } = useSelector((state: RootState) => state.taskList);
 
   return (

@@ -111,7 +111,7 @@ const analyticsController = async (req: Request, res: Response) => {
       priorityAnalytics,
       totalTasks: taskStatusPriorityData.length,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Task Analytics Fetching Error: ", err.message);
     res.status(500).json({
       status: "failure",

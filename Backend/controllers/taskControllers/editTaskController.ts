@@ -34,7 +34,7 @@ const editTaskController = async (req: Request, res: Response) => {
       message: "Task Updated Successfully!",
       updatedTask: {id: taskId, ...updatedData},
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Edit Task Error: ", err.message);
     res.status(500).json({
       status: "failure",

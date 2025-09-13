@@ -36,7 +36,7 @@ const getAllTasksController = async (req: Request, res: Response) => {
       status: tasks.status,
       startingDate: tasks.startingDate,
       deadline: tasks.deadline,
-    }
+    };
     const taskArray: taskListType[] = await db
       .select(requiredFields)
       .from(tasks)
@@ -65,12 +65,11 @@ const getAllTasksController = async (req: Request, res: Response) => {
       totalPages,
       pageNumber,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).json({
       status: "failure",
       message: "Problem Fetching Tasks!",
-      error: err.message,
     });
   }
 };
