@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { sendOTP, generateOTP } from "./sendOtpController.js";
 import db from "../../connection.js";
 import { otps } from "../../drizzle_essentials/schema.js";

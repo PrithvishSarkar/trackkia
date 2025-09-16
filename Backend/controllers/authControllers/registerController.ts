@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import db from "../../connection.js";
@@ -11,7 +11,7 @@ const registerController = async (req: Request, res: Response) => {
     email: string;
     password: string;
   }
-  const { name, email, password } = req.body as RequestBodyType;
+  const { name, email, password }: RequestBodyType = req.body;
 
   // Check if the credentials are correct or not.
   if (!name.trim() || !email.trim() || !password.trim()) {
@@ -62,10 +62,12 @@ const registerController = async (req: Request, res: Response) => {
     });
 
     // Fetching user's name that's to be send to Frontend.
-    const [{ name: userName }]: { name: string }[] = await db
+    const userNameArray: { name: string }[] = await db
       .select({ name: users.name })
       .from(users)
       .where(eq(users.id, result[0].insertId));
+    if (userNameArray.length === 0 || !userNameArray[0]) return;
+    const userName: string = userNameArray[0].name;
 
     // Sending appropriate response to Frontend.
     res.status(201).json({

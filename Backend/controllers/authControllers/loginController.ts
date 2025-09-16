@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from "../../connection.js";
 import { users } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
@@ -34,7 +34,7 @@ const loginController = async (req: Request, res: Response) => {
       .from(users)
       .where(eq(users.email, email.toLowerCase()));
 
-    if (userInfoArray.length === 0) {
+    if (userInfoArray.length === 0 || !userInfoArray[0]) {
       res.status(400).json({ status: "failure", message: "User Not Found!" });
       return;
     }

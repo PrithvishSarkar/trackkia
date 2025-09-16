@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from "../../connection.js";
 import { tasks } from "../../drizzle_essentials/schema.js";
 import { eq, sql } from "drizzle-orm";
@@ -53,7 +53,9 @@ const getAllTasksController = async (req: Request, res: Response) => {
       .from(tasks)
       .where(eq(tasks.userId, req.userId));
     const totalTasks =
-      countResult.length > 0 ? Number(countResult[0].count) : 0;
+      countResult.length > 0 && countResult[0] !== undefined
+        ? Number(countResult[0].count)
+        : 0;
     const totalPages = Math.ceil(totalTasks / taskLimit);
 
     // Sending appropriate response to Frontend.

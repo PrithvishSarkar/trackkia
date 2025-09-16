@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import type { NextFunction, Request, Response } from "express";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 
@@ -38,11 +38,11 @@ export const protectedRouteMiddleware = (
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
     req.userId = decoded.id;
     next();
-  } catch (err) {
+  } catch (err: any) {
+      console.error("Token Verification Error: ", err.message);
     res.status(401).json({
       status: "failure",
       message: "Invalid or expired token",
     });
-    console.error("Token Verification Error: ", err.message);
   }
 };

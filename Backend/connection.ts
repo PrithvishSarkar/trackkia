@@ -5,8 +5,14 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./.env", quiet: true });
 
-if (!process.env.DB_PASSWORD) {
-  console.error("Cannot find environment variable.");
+if (
+  !process.env.DB_HOSTNAME ||
+  !process.env.DB_PORT ||
+  !process.env.DB_USER ||
+  !process.env.DB_PASSWORD ||
+  !process.env.DB_NAME
+) {
+  console.error("Environment Variables are Undefined");
   process.exit(1);
 }
 
@@ -20,7 +26,7 @@ const pool: mysql.Pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10, // number of connections in pool.
   queueLimit: 0,
-  timezone: 'Z', // Date and Time always in UTC timezone.
+  timezone: "Z", // Date and Time always in UTC timezone.
 });
 
 // Exporting drizzle connection.

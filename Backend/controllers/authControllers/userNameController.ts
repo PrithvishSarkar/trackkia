@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from "../../connection.js";
 import { users } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
@@ -15,15 +15,16 @@ declare global {
 const userNameController = async (req: Request, res: Response) => {
   const id: number = req.userId;
   try {
-    const [{ name }]: { name: string }[] = await db
+    const userNameArray: { name: string }[] = await db
       .select({ name: users.name })
       .from(users)
       .where(eq(users.id, id));
+    if (userNameArray.length === 0 || !userNameArray[0]) return;
 
     res.status(200).json({
       status: "success",
       message: "User Name Found Successfully!",
-      userName: name,
+      userName: userNameArray[0].name,
     });
   } catch (err: any) {
     console.error(err.message);

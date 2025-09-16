@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from "../../connection.js";
 import { users } from "../../drizzle_essentials/schema.js";
 import { otps } from "../../drizzle_essentials/schema.js";
@@ -68,7 +68,7 @@ const sendOtpController = async (req: Request, res: Response) => {
       .from(users)
       .where(eq(users.email, email.toLowerCase()));
     // If user not found, then send a warning.
-    if (userDataArray.length === 0) {
+    if (userDataArray.length === 0 || !userDataArray[0]) {
       res.status(404).json({
         status: "failure",
         message: `User Not Found! \nPlease Register First!`,
@@ -77,12 +77,16 @@ const sendOtpController = async (req: Request, res: Response) => {
     }
     // If user found, check if OTP already sent.
     // If OTP for the given user already exists, then send a warning.
-    const { id: userId }: { id: number } = userDataArray[0];
+    const userId: number = userDataArray[0].id;
     const countOtps = await db
       .select({ count: sql<number>`COUNT(*)` })
       .from(otps)
       .where(eq(otps.userId, userId));
-    if (countOtps.length && countOtps[0].count > 0) {
+    if (
+      countOtps.length &&
+      countOtps[0] !== undefined &&
+      countOtps[0].count > 0
+    ) {
       res
         .status(400)
         .json({ status: "failure", message: "OTP already sent!", userId });

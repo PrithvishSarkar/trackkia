@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import db from "../../connection.js";
-import { users } from "../../drizzle_essentials/schema";
+import { users } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
 
 const resetPasswordController = async (req: Request, res: Response) => {

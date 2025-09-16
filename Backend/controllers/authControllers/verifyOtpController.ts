@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from "../../connection.js";
 import { otps } from "../../drizzle_essentials/schema.js";
 import bcrypt from "bcryptjs";
@@ -21,7 +21,7 @@ const verifyOtpController = async (req: Request, res: Response) => {
       .select({ otp: otps.otp, otpExpiry: otps.otpExpiry })
       .from(otps)
       .where(eq(otps.userId, userId));
-    if (otpInfoArray.length === 0) {
+    if (otpInfoArray.length === 0 || !otpInfoArray[0]) {
       res.status(404).json({
         status: "failure",
         message: "User Not Found or OTP Already Verified!",
