@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
-import { reset } from "../redux-toolkit/reduxSlices/taskFormSlice.js";
+import { setLoading, reset } from "../redux-toolkit/reduxSlices/taskFormSlice.js";
 import { setTaskList } from "../redux-toolkit/reduxSlices/getTasksSlice.js";
 import { setShowEditModal } from "../redux-toolkit/reduxSlices/editTaskSlice.js";
 import dateToString from "./dateToString.js";
@@ -71,61 +71,67 @@ const handleAddEditTaskFormSubmit = async (
   const API_CALL_METHOD = use === "add" ? "POST" : "PATCH";
 
   // Making API call to Backend.
-  const response = await (
-    await fetch(API_CALL_URL, {
-      method: API_CALL_METHOD,
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        description,
-        priority,
-        startingDate,
-        deadline,
-      }),
-    })
-  ).json();
-
-  switch (response.status) {
-    case "failure":
-      toast.error(response.message);
-      break;
-    case "success":
-      toast.success(response.message);
-      // Below `if` statement will only work for `edit` task to update edited task.
-      if (response.updatedTask) {
-        const startingDate = dateToString(response.updatedTask.startingDate);
-        const deadline = dateToString(response.updatedTask.deadline);
-        if (taskList) {
-          const updatedTaskList = taskList.map((task: TaskType) => {
-            if (task.id === response.updatedTask.id) {
-              interface UpdatedTaskDestructureType {
-                title: string;
-                description: string;
-                priority: "Low Priority" | "Medium Priority" | "High Priority";
-              }
-              const {
-                title,
-                description,
-                priority,
-              }: UpdatedTaskDestructureType = response.updatedTask;
-              return {
-                ...task,
-                title,
-                description,
-                priority,
-                startingDate,
-                deadline,
-              };
-            } else return task;
-          });
-          dispatch(setTaskList(updatedTaskList));
-          dispatch(setShowEditModal(false));
+  try {
+    dispatch(setLoading(true));
+    const response = await (
+      await fetch(API_CALL_URL, {
+        method: API_CALL_METHOD,
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          description,
+          priority,
+          startingDate,
+          deadline,
+        }),
+      })
+    ).json();
+  
+    switch (response.status) {
+      case "failure":
+        toast.error(response.message);
+        break;
+      case "success":
+        toast.success(response.message);
+        // Below `if` statement will only work for `edit` task to update edited task.
+        if (response.updatedTask) {
+          const startingDate = dateToString(response.updatedTask.startingDate);
+          const deadline = dateToString(response.updatedTask.deadline);
+          if (taskList) {
+            const updatedTaskList = taskList.map((task: TaskType) => {
+              if (task.id === response.updatedTask.id) {
+                interface UpdatedTaskDestructureType {
+                  title: string;
+                  description: string;
+                  priority: "Low Priority" | "Medium Priority" | "High Priority";
+                }
+                const {
+                  title,
+                  description,
+                  priority,
+                }: UpdatedTaskDestructureType = response.updatedTask;
+                return {
+                  ...task,
+                  title,
+                  description,
+                  priority,
+                  startingDate,
+                  deadline,
+                };
+              } else return task;
+            });
+            dispatch(setTaskList(updatedTaskList));
+            dispatch(setShowEditModal(false));
+          }
         }
-      }
-      break;
-    default:
-      break;
+        break;
+      default:
+        break;
+    }
+  } catch(err) {
+    console.error("Task Form API Call Error: ", err);
+    toast.error("API Call or Database Error occured while adding task!");
   }
 
   // Reset all state variables.

@@ -25,9 +25,7 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    let isAuthenticated: boolean = userName !== "";
-    pathRedirect(pathname, isAuthenticated, navigate);
-    return () => { isAuthenticated = false };
+    pathRedirect(pathname, userName, navigate);
   }, [userName]);
 
   React.useEffect(() => {

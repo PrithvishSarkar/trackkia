@@ -24,7 +24,7 @@ const fetchTasksAnalytics = async (dispatch: AppDispatch) => {
       dispatch(reset());
       break;
     case "success":
-      toast.success(response.message);
+      // toast.success(response.message);
       dispatch(setStatusAnalytics(response.statusAnalytics));
       dispatch(setPriorityAnalytics(response.priorityAnalytics));
       dispatch(setTotalTasks(response.totalTasks));

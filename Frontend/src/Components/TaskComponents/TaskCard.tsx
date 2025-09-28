@@ -8,6 +8,7 @@ import { useThemeContext } from "../../ContextAPI/ThemeContext.js";
 import handleEditTask from "../../helperFunctions/editTask.js";
 import handleDeleteTask from "../../helperFunctions/deleteTask.js";
 import handleTaskStatusChange from "../../helperFunctions/taskStatusChange.js";
+import React from "react";
 
 interface TaskCardPropType {
   id: number;
@@ -35,6 +36,8 @@ const TaskCard = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const { taskList } = useSelector((state: RootState) => state.taskList);
+
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   return (
     <Card
@@ -127,7 +130,7 @@ const TaskCard = ({
                 case "Edit Task":
                   return handleEditTask(id, dispatch, taskList);
                 case "Delete Task":
-                  return handleDeleteTask(id, dispatch, taskList);
+                  return handleDeleteTask(id, dispatch, taskList, setLoading);
                 default:
                   return;
               }
@@ -137,10 +140,14 @@ const TaskCard = ({
                 <Button
                   variant={btnText === "Edit Task" ? "success" : "danger"}
                   className="w-100 fw-semibold"
-                  disabled={preview}
+                  disabled={preview || loading}
                   onClick={handleClick}
                 >
-                  {btnText}
+                  {!loading
+                    ? btnText
+                    : btnText === "Delete Task"
+                    ? "Deleting..."
+                    : "Edit Task"}
                 </Button>
               </Col>
             );

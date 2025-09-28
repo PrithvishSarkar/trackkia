@@ -70,6 +70,7 @@ const LandingPage = () => {
         </Col>
         <Col lg={6} className={styles.imageContainer}>
           <Image
+            fluid
             src="/landing-page-image-transparent.jpg"
             alt="landing-page-image"
             style={{ maxWidth: "100%" }}

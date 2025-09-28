@@ -24,14 +24,19 @@ const AnalyticsChart = ({
   title,
   analyticsArray,
   totalTasks,
-  innerRadius
+  innerRadius,
 }: AnalyticsChartPropType) => {
   const { theme } = useThemeContext();
   const isThemeDark: boolean = theme === "dark";
 
   return (
-    <main>
-      <Container className={`fw-bold fs-5 text-lg-center ${isThemeDark && "text-light"}`}>
+    <main
+      style={{
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        borderRadius: "1rem",
+      }}
+    >
+      <Container className={`fw-bold fs-5 ${isThemeDark && "text-light"}`}>
         {title}
       </Container>
       <ResponsiveContainer width="100%" height={400}>

@@ -16,12 +16,9 @@ interface AddTasksPageParametersType {
   use: "add" | "edit";
 }
 
-const AddEditTaskForm = ({
-  isThemeDark,
-  use,
-}: AddTasksPageParametersType) => {
+const AddEditTaskForm = ({ isThemeDark, use }: AddTasksPageParametersType) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { title, description, priority, deadline } = useSelector(
+  const { title, description, priority, deadline, loading } = useSelector(
     (state: RootState) => state.taskForm
   );
   const { taskId } = useSelector((state: RootState) => state.editTask);
@@ -148,8 +145,13 @@ const AddEditTaskForm = ({
         className={`align-self-start bg-success border-success rounded-pill 
           px-5 fw-bold fs-5 text-dark`}
         style={{ paddingBottom: "0.5rem" }}
+        disabled={loading}
       >
-        <span> {use === "add" ? "Add Task" : "Edit Task"} </span>
+        {loading ? (
+          <span>Please Wait</span>
+        ) : (
+          <span> {use === "add" ? "Add Task" : "Edit Task"} </span>
+        )}
         &nbsp;
         <FaArrowRightLong />
       </Button>

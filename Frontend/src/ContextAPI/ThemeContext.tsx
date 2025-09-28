@@ -17,7 +17,7 @@ interface ThemeContextWrapperType {
 const ThemeContextWrapper: React.FC<ThemeContextWrapperType> = ({
   children,
 }) => {
-  const [theme, setTheme] = React.useState("light");
+  const [theme, setTheme] = React.useState("dark");
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}

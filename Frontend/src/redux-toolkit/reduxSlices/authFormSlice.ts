@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface initialStateType {
+interface InitialStateType {
   name: string;
   email: string;
   password: string;
@@ -8,9 +8,10 @@ interface initialStateType {
   passwordStrength: string;
   showPasswordStrength: boolean;
   passwordStrengthColor: string;
+  loading: boolean;
 }
 
-const initialState: initialStateType = {
+const initialState: InitialStateType = {
   name: "",
   email: "",
   password: "",
@@ -18,46 +19,50 @@ const initialState: initialStateType = {
   passwordStrength: "",
   showPasswordStrength: false,
   passwordStrengthColor: "",
+  loading: false,
 };
 
 const authFormSlice = createSlice({
   name: "authForm",
   initialState,
   reducers: {
-    setName: (state: initialStateType, action: PayloadAction<string>) => {
+    setName: (state: InitialStateType, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
-    setEmail: (state: initialStateType, action: PayloadAction<string>) => {
+    setEmail: (state: InitialStateType, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
-    setPassword: (state: initialStateType, action: PayloadAction<string>) => {
+    setPassword: (state: InitialStateType, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
     setShowPassword: (
-      state: initialStateType,
+      state: InitialStateType,
       action: PayloadAction<boolean>
     ) => {
       state.showPassword = action.payload;
     },
     setPasswordStrength: (
-      state: initialStateType,
+      state: InitialStateType,
       action: PayloadAction<string>
     ) => {
       state.passwordStrength = action.payload;
     },
     setShowPasswordStrength: (
-      state: initialStateType,
+      state: InitialStateType,
       action: PayloadAction<boolean>
     ) => {
       state.showPasswordStrength = action.payload;
     },
     setPasswordStrengthColor: (
-      state: initialStateType,
+      state: InitialStateType,
       action: PayloadAction<string>
     ) => {
       state.passwordStrengthColor = action.payload;
     },
-    reset: (state: initialStateType) => {
+    setLoading: (state: InitialStateType, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    reset: (state: InitialStateType) => {
       state.name = "";
       state.email = "";
       state.password = "";
@@ -65,6 +70,7 @@ const authFormSlice = createSlice({
       state.passwordStrength = "";
       state.showPasswordStrength = false;
       state.passwordStrengthColor = "";
+      state.loading = false;
     },
   },
 });
@@ -77,6 +83,7 @@ export const {
   setPasswordStrength,
   setShowPasswordStrength,
   setPasswordStrengthColor,
+  setLoading,
   reset,
 } = authFormSlice.actions;
 

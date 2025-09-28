@@ -1,5 +1,5 @@
 import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
-import { reset } from "../redux-toolkit/reduxSlices/authFormSlice.js";
+import { setLoading, reset } from "../redux-toolkit/reduxSlices/authFormSlice.js";
 import { toast } from "react-toastify";
 import type { NavigateFunction } from "react-router";
 import type React from "react";
@@ -23,6 +23,7 @@ const handleAuthFormSubmit = async (
 
   // Making an API Call to send form's data to Backend.
   try {
+    dispatch(setLoading(true));
     const response = await (
       await fetch(API_CALL_URL, {
         method: "POST",

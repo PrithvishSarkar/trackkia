@@ -2,12 +2,12 @@ import type { NavigateFunction } from "react-router";
 
 const pathRedirect = (
   pathname: string,
-  isAuthenticated: boolean,
+  userName: string,
   navigate: NavigateFunction
 ) => {
-  switch (isAuthenticated) {
+  switch (userName !== "") {
     case false:
-      const isCorrectPath: boolean = ["/", "/login", "register"].includes(
+      const isCorrectPath: boolean = ["/", "/login", "/register"].includes(
         pathname
       );
       !isCorrectPath && navigate("/login");

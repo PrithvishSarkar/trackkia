@@ -36,6 +36,7 @@ const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormParametersType) => {
     passwordStrength,
     showPasswordStrength,
     passwordStrengthColor,
+    loading,
   } = useSelector((state: RootState) => state.authForm);
   /*======================
   Redux Toolkit Hooks Ends
@@ -159,8 +160,21 @@ const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormParametersType) => {
       </Form.Group>
 
       {/* Register Button */}
-      <Button variant="success" className="align-self-start" type="submit">
-        <span className="fs-5">{isRoleRegister ? "Register" : "Login"}</span>
+      <Button
+        variant="success"
+        className="align-self-start"
+        type="submit"
+        disabled={loading}
+      >
+        <span className="fs-5">
+          {isRoleRegister
+            ? loading
+              ? "Registering"
+              : "Register"
+            : loading
+            ? "Logging In"
+            : "Login"}
+        </span>
         &nbsp;
         <LuLogIn className="fs-2" />
       </Button>
