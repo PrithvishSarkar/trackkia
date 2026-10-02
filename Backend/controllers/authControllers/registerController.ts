@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import db from "../../connection.js";
-import { users } from "../../drizzle_essentials/schema.js";
+import {dbConnection} from "@/database/dbConnection.js";
+import { users } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
 
 const registerController = async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ const registerController = async (req: Request, res: Response) => {
 
   try {
     // Checking if the user already exists or not - DB will not store data if user exists.
-    const userIdArray: { id: number }[] = await db
+    const userIdArray: { id: number }[] = await dbConnection
       .select({ id: users.id })
       .from(users)
       .where(eq(users.email, email.toLowerCase()));
@@ -38,7 +38,7 @@ const registerController = async (req: Request, res: Response) => {
     const hashedPassword: string = await bcrypt.hash(password, 10);
 
     // Storing the given data in MySQL Database.
-    const result = await db
+    const result = await dbConnection
       .insert(users)
       .values({ name, email: email.toLowerCase(), password: hashedPassword });
 
@@ -62,7 +62,7 @@ const registerController = async (req: Request, res: Response) => {
     });
 
     // Fetching user's name that's to be send to Frontend.
-    const userNameArray: { name: string }[] = await db
+    const userNameArray: { name: string }[] = await dbConnection
       .select({ name: users.name })
       .from(users)
       .where(eq(users.id, result[0].insertId));

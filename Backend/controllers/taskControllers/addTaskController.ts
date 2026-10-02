@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import db from "../../connection.js";
+import db from "../../database/dbConnection.js";
 import { tasks } from "../../drizzle_essentials/schema.js";
 
 // Extend Express Request interface to include 'user'.

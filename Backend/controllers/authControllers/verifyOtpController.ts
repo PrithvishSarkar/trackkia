@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import db from "../../connection.js";
+import db from "../../database/dbConnection.js";
 import { otps } from "../../drizzle_essentials/schema.js";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";

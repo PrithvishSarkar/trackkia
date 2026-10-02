@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import db from "../../connection.js";
+import db from "../../database/dbConnection.js";
 import { users } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
 

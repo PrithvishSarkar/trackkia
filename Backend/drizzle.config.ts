@@ -1,18 +1,20 @@
+import path from "path";
+import { config } from "dotenv";
+config({ path: path.resolve(process.cwd(), ".env") });
+
 import { defineConfig } from "drizzle-kit";
-import dotenv from "dotenv";
-dotenv.config({ path: "./.env", quiet: true });
+
+const dbConnectionString: string | undefined = process.env.DB_SESSION_POOLER_URL;
+if (!dbConnectionString)
+  throw new Error("Environment Variable DB Connection String Missing!");
 
 export default defineConfig({
-  schema: "./drizzle_essentials/schema.ts", // Schema File Location
-  out: "./drizzle_essentials/drizzle", // Generated SQL Directory
-  dialect: "mysql",
+  out: "./database/drizzle",
+  schema: "./database/schema.ts",
+  dialect: "postgresql",
   verbose: true,
   strict: true,
   dbCredentials: {
-    host: process.env.DB_HOSTNAME!,
-    port: Number(process.env.DB_PORT),
-    user: process.env.DB_USER!,
-    password: process.env.DB_PASSWORD!,
-    database: process.env.DB_NAME!,
+    url: dbConnectionString,
   },
 });

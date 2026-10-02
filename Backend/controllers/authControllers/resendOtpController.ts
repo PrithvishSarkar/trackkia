@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { sendOTP, generateOTP } from "./sendOtpController.js";
-import db from "../../connection.js";
+import db from "../../database/dbConnection.js";
 import { otps } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";

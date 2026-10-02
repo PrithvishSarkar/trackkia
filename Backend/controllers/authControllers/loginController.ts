@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import db from "../../connection.js";
-import { users } from "../../drizzle_essentials/schema.js";
+import {dbConnection} from "@/database/dbConnection.js";
+import { users } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -29,7 +29,7 @@ const loginController = async (req: Request, res: Response) => {
       name: string;
       password: string;
     }
-    const userInfoArray: userInfoDataType[] = await db
+    const userInfoArray: userInfoDataType[] = await dbConnection
       .select({ id: users.id, name: users.name, password: users.password })
       .from(users)
       .where(eq(users.email, email.toLowerCase()));
