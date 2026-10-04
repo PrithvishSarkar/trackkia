@@ -1,12 +1,16 @@
-import type { Request, Response } from "express";
-import { sendOTP, generateOTP } from "./sendOtpController.js";
-import db from "../../database/dbConnection.js";
-import { otps } from "../../drizzle_essentials/schema.js";
+import type { Request, Response, NextFunction } from "express";
+import { generateOTP, hashOTP } from "@/utils/otpGenerateAndHash.js";
+import sendOTP from "@/utils/sendOtpOnEmail.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import { users, otps } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 
-const resendOtpController = async (req: Request, res: Response) => {
-  const { email, userId }: { email: string; userId: number } = req.body;
+const resentOtpController = async (
+  req: Request<{}, {}, { email: string; userId: number }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { email, userId } = req.body;
 
   /*
   No need to check for valid email or verify user authenticity as it's already done
@@ -16,24 +20,23 @@ const resendOtpController = async (req: Request, res: Response) => {
   therefore, the user cannot modify the email when asking to resend OTP.
   */
 
-  // Generate OTP using imported function.
-  const OTP: string = generateOTP();
+  // Generate and hash OTP value.
+  const OTP = generateOTP();
+  const hashedOTP = await hashOTP(OTP);
 
-  // Hash the OTP before updating it on Database.
-  const hashedOTP = await bcrypt.hash(OTP, 10);
-
-  // Update the OTP and Expiry values in Database.
+  // Update the OTP and expiry date in DB.
   try {
-    await db
+    await dbConnection
       .update(otps)
       .set({ otp: hashedOTP, otpExpiry: new Date(Date.now() + 5 * 60 * 1000) })
-      .where(eq(otps.userId, userId));
-    sendOTP(email, OTP, res, userId);
-  } catch (err: any) {
-    res
-      .status(500)
-      .json({ status: "failure", message: "Database Updation Failure!" });
+      .where(eq(users.id, userId));
+
+    // Resend OTP via email.
+    sendOTP(email, OTP, res, next, userId);
+  } catch (error) {
+    console.error("Resend OTP Server Error");
+    next(error);
   }
 };
 
-export default resendOtpController;
+export default resentOtpController;
