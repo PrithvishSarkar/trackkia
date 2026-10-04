@@ -4,9 +4,7 @@ import { dbConnection } from "@/database/dbConnection.js";
 import { users } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
-export const tokenName = "trackkia_token";
+import packageToken from "@/utils/packageToken.js";
 
 interface RequestBody {
   name: string;
@@ -45,20 +43,9 @@ const registerController = async (
       throw new CustomError("Problem Inserting User Details in DB", 500);
 
     // Generate and package JSON Web Token.
-    const JWT_SECRET_KEY: string | undefined = process.env.JWT_SECRET;
-    if (!JWT_SECRET_KEY)
-      throw new CustomError("JWT Secret Key Unavailable", 500);
-    const token = jwt.sign({ id: userDetails.id }, JWT_SECRET_KEY, {
-      expiresIn: "7d",
-    });
-    const isProduction = process.env.NODE_ENV === "production";
-    res.cookie(tokenName, token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-    });
+    packageToken(userDetails.id, res);
 
+    // Sending appropriate response to Frontend.
     res.status(201).json({
       status: "success",
       message: "User Registered Successfully!",
