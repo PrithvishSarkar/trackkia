@@ -9,6 +9,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes.js";
 import taskRouter from "./routes/taskRoutes.js";
+import globalErrorHandlingMiddleware from "./globalErrorHandlingMiddleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,8 +30,9 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use("/auth", authRouter);
-app.use("/task", taskRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/task", taskRouter);
+app.use(globalErrorHandlingMiddleware);
 /* Middlewares ends here */
 
 app.listen(PORT, () => {

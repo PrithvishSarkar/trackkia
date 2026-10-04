@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { users } from "../../drizzle_essentials/schema.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import { users } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
 
 // Extend Express Request interface to include 'user'.
