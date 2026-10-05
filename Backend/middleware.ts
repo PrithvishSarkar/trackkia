@@ -3,15 +3,6 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 
-// Extend Express Request interface to include 'user'.
-declare global {
-  namespace Express {
-    interface Request {
-      userId: number;
-    }
-  }
-}
-
 export const protectedRouteMiddleware = (
   req: Request,
   res: Response,
