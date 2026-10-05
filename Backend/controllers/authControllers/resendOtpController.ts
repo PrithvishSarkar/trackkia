@@ -32,7 +32,7 @@ const resentOtpController = async (
       .where(eq(users.id, userId));
 
     // Resend OTP via email.
-    sendOTP(email, OTP, res, next, userId);
+    await sendOTP(email, OTP, res, next, userId);
   } catch (error) {
     console.error("Resend OTP Server Error");
     next(error);
