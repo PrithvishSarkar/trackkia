@@ -1,66 +1,51 @@
-import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { otps } from "../../drizzle_essentials/schema.js";
-import bcrypt from "bcryptjs";
+import type { Request, Response, NextFunction } from "express";
+import CustomError from "@/customError.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import { otps } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
-const verifyOtpController = async (req: Request, res: Response) => {
-  const { otp: userOTP, userId }: { otp: string; userId: number } = req.body;
-
-  // Check if the OTP and User ID is a valid string or not.
-  if (!userOTP.trim() || !userId) {
-    res
-      .status(400)
-      .json({ status: "failure", message: "OTP cannot be empty!" });
-    return;
-  }
+const verifyOtpController = async (
+  req: Request<{}, {}, { otp: string; userId: number }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { otp: userOtp, userId } = req.body;
 
   try {
-    // Fetching OTP data using 'userId'.
-    const otpInfoArray = await db
+    // Check if OTP and user ID is valid.
+    if (!userOtp.trim() || !userId)
+      throw new CustomError("Missing Required Data", 400);
+
+    // Fetch OTP Information using user ID.
+    const otpInfo = await dbConnection
       .select({ otp: otps.otp, otpExpiry: otps.otpExpiry })
       .from(otps)
       .where(eq(otps.userId, userId));
-    if (otpInfoArray.length === 0 || !otpInfoArray[0]) {
-      res.status(404).json({
-        status: "failure",
-        message: "User Not Found or OTP Already Verified!",
-      });
-      return;
-    }
-    const { otp, otpExpiry } = otpInfoArray[0];
-    // Checking if OTP is expired or not.
-    if (otpExpiry < new Date()) {
-      res.status(403).json({
-        status: "failure",
-        message: "OTP has expired. Please resend OTP!",
-      });
-      return;
-    }
+    if (!otpInfo.length || !otpInfo[0])
+      throw new CustomError("OTP Information Not Found in DB", 404);
 
-    // Verify OTP send via Frontend.
-    const isOtpMatched: boolean = await bcrypt.compare(userOTP, otp);
-    if (!isOtpMatched) {
-      res.status(401).json({
-        status: "failure",
-        message: `Incorrect OTP! \n Please provide a valid OTP!`,
-      });
-      return;
-    }
+    const { otp, otpExpiry } = otpInfo[0];
+    // Check if OTP is expired of not.
+    if (otpExpiry < new Date())
+      throw new CustomError("OTP Expired - Request New OTP", 410);
 
-    // Deleting OTP from Database as it's verified successfully.
-    await db.delete(otps).where(eq(otps.userId, userId));
+    // Verify OTP value.
+    const isOtpCorrect: boolean = await bcrypt.compare(userOtp, otp);
+    if (!isOtpCorrect) throw new CustomError("Incorrect OTP Value", 422);
+
+    // Delete OTP from DB as the OTP is validated.
+    await dbConnection.delete(otps).where(eq(otps.userId, userId));
 
     // Sending appropriate response to Frontend.
-    res
-      .status(200)
-      .json({ status: "success", message: "OTP Verified Successfully!" });
-  } catch (err: any) {
-    console.error("OTP Verification Error: ", err.message);
-    res.status(500).json({
-      status: "failure",
-      message: `Problem Verifying OTP! \nPlease try again later.`,
+    res.status(200).json({
+      status: "success",
+      message: "OTP Verified Successfully",
+      userId,
     });
+  } catch (error) {
+    console.error("Verifying OTP Server Error");
+    next(error);
   }
 };
 
