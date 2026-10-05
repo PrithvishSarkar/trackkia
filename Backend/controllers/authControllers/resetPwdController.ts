@@ -1,61 +1,53 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
+import CustomError from "@/customError.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import { users } from "@/database/schema.js";
 import bcrypt from "bcryptjs";
-import db from "../../database/dbConnection.js";
-import { users } from "../../drizzle_essentials/schema.js";
 import { eq } from "drizzle-orm";
 
-const resetPasswordController = async (req: Request, res: Response) => {
-  interface requestBodyType {
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }
-  const { email, password, confirmPassword }: requestBodyType = req.body;
+interface RequestBody {
+  userId: number;
+  password: string;
+  confirmPassword: string;
+}
 
-  // Check if the password and confirm password is valid or not.
-  if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
-    res
-      .status(400)
-      .json({ status: "failure", message: "Credentials cannot be empty!" });
-    return;
-  }
+const resetPasswordController = async (
+  req: Request<{}, {}, RequestBody>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { userId, password, confirmPassword } = req.body;
 
-  /*
-  NOTE:
-  User existence is already verified by `/send-otp` and `/verify-otp` endpoints.
-  This endpoint will only be accessible if `/verify-otp` endpoint is passed.
-  */
-
-  // Verify if both password and confirm password are same or not.
-  if (password !== confirmPassword) {
-    res.status(400).json({
-      status: "failure",
-      message: `"Confirm Password" is not the same as "Password"!`,
-    });
-    return;
-  }
-
-  // Hash the given password using Bcrypt.
-  const hashedPassword: string = await bcrypt.hash(password, 10);
-
-  // Updating 'password' in Database.
   try {
-    await db
+    // Check if user inputs are valid.
+    if (!userId || !password.trim() || !confirmPassword.trim())
+      throw new CustomError("Missing Required Fields", 400);
+
+    /*
+    NOTE:
+    User existence is already verified by `/send-otp` and `/verify-otp` endpoints.
+    This endpoint will only be accessible if `/verify-otp` endpoint is passed.
+    */
+
+    // Check if password and confirm password are same.
+    if (password !== confirmPassword)
+      throw new CustomError("Password Don't Match", 400);
+
+    // Hash the password and update in DB.
+    const hashPassword: string = await bcrypt.hash(password, 10);
+    await dbConnection
       .update(users)
-      .set({ password: hashedPassword })
-      .where(eq(users.email, email));
+      .set({ password: hashPassword })
+      .where(eq(users.id, userId));
 
     // Sending appropriate response to Frontend.
     res.status(200).json({
       status: "success",
-      message: "Password Reset Successfully!",
+      message: "Password Reset Successfully",
     });
-  } catch (err: any) {
-    console.error("Password Reset Error: ", err.message);
-    res
-      .status(500)
-      .json({ status: "failure", message: "Problem Resetting Password!" });
-    return;
+  } catch (error) {
+    console.error("Resetting Password Server Error");
+    next(error);
   }
 };
 
