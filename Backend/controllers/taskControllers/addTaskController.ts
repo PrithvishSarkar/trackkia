@@ -12,7 +12,7 @@ interface RequestBody {
   deadline: Date;
 }
 
-interface TaskDetails extends RequestBody {
+interface AddedTaskDetails extends RequestBody {
   id: number;
   status: "Pending" | "In Progress" | "Completed";
 }
@@ -49,11 +49,11 @@ const addTaskController = async (
     if (!isUserInputValid)
       throw new CustomError("Missing Required Fields", 400);
 
-    const newTaskArray: TaskDetails[] = await dbConnection
+    const newTaskArray: AddedTaskDetails[] = await dbConnection
       .insert(tasks)
       .values({ title, description, priority, userId, startingDate, deadline })
       .returning(requiredFields);
-    const newTaskDetails: TaskDetails | undefined = newTaskArray[0];
+    const newTaskDetails: AddedTaskDetails | undefined = newTaskArray[0];
     if (!newTaskDetails)
       throw new CustomError("Added Task Details Not Fetched", 500);
 

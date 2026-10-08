@@ -5,20 +5,20 @@ import { and, eq } from "drizzle-orm";
 import CustomError from "@/customError.js";
 
 const deleteTaskController = async (
-  req: Request<{}, {}, {}, { id: string }>,
+  req: Request<{ id: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   const userId: number = req.userId;
-  const taskId: number = parseInt(req.query.id);
+  const taskId: number = parseInt(req.params.id);
 
   try {
-    const deletedTask = await dbConnection
+    const deletedTaskArray = await dbConnection
       .delete(tasks)
       .where(and(eq(tasks.userId, userId), eq(tasks.id, taskId)))
       .returning({ id: tasks.id });
 
-    const id: number | undefined = deletedTask[0]?.id;
+    const id: number | undefined = deletedTaskArray[0]?.id;
     if (!id)
       throw new CustomError("Problem Deleting Task - Try Deleting Again", 500);
 
