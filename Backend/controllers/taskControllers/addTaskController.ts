@@ -12,6 +12,21 @@ interface RequestBody {
   deadline: Date;
 }
 
+interface TaskDetails extends RequestBody {
+  id: number;
+  status: "Pending" | "In Progress" | "Completed";
+}
+
+const requiredFields = {
+  id: tasks.id,
+  title: tasks.title,
+  description: tasks.description,
+  priority: tasks.priority,
+  status: tasks.status,
+  startingDate: tasks.startingDate,
+  deadline: tasks.deadline,
+};
+
 const addTaskController = async (
   req: Request<{}, {}, RequestBody>,
   res: Response,
@@ -34,14 +49,19 @@ const addTaskController = async (
     if (!isUserInputValid)
       throw new CustomError("Missing Required Fields", 400);
 
-    await dbConnection
+    const newTaskArray: TaskDetails[] = await dbConnection
       .insert(tasks)
-      .values({ title, description, priority, userId, startingDate, deadline });
+      .values({ title, description, priority, userId, startingDate, deadline })
+      .returning(requiredFields);
+    const newTaskDetails: TaskDetails | undefined = newTaskArray[0];
+    if (!newTaskDetails)
+      throw new CustomError("Added Task Details Not Fetched", 500);
 
     // Sending appropriate response to Frontend.
     res.status(201).json({
       status: "success",
       message: "Task Added Successfully",
+      newTask: newTaskDetails,
     });
   } catch (error) {
     console.error("Add Task Server Error");
