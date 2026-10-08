@@ -3,6 +3,7 @@ import { dbConnection } from "@/database/dbConnection.js";
 import { tasks } from "@/database/schema.js";
 import { eq, and } from "drizzle-orm";
 import CustomError from "@/customError.js";
+import addOrEditInputValidate from "@/utils/addOrEditInputValidate.js";
 
 interface RequestBody {
   title: string;
@@ -26,6 +27,19 @@ const editTaskController = async (
   const { title, description, priority, startingDate, deadline } = req.body;
 
   try {
+    // Check if user input is valid.
+    const isUserInputValid: boolean = addOrEditInputValidate(
+      userId,
+      title,
+      description,
+      priority,
+      startingDate,
+      deadline,
+    );
+    if (!isUserInputValid)
+      throw new CustomError("Missing Required Fields", 400);
+
+    // Update DB field values.
     const editedTaskArray: EditedTaskDetails[] = await dbConnection
       .update(tasks)
       .set({ title, description, priority, startingDate, deadline })
