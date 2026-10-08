@@ -1,23 +1,36 @@
-import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { tasks } from "../../drizzle_essentials/schema.js";
-import { eq } from "drizzle-orm";
+import type { Request, Response, NextFunction } from "express";
+import { dbConnection } from "@/database/dbConnection.js";
+import { tasks } from "@/database/schema.js";
+import { and, eq } from "drizzle-orm";
+import CustomError from "@/customError.js";
 
-const deleteTaskController = async (req: Request, res: Response) => {
-  const taskId: number = Number(req.params.id);
+const deleteTaskController = async (
+  req: Request<{}, {}, {}, { id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const userId: number = req.userId;
+  const taskId: number = parseInt(req.query.id);
+
   try {
-    await db.delete(tasks).where(eq(tasks.id, taskId));
+    const deletedTask = await dbConnection
+      .delete(tasks)
+      .where(and(eq(tasks.userId, userId), eq(tasks.id, taskId)))
+      .returning({ id: tasks.id });
+
+    const id: number | undefined = deletedTask[0]?.id;
+    if (!id)
+      throw new CustomError("Problem Deleting Task - Try Deleting Again", 500);
+
+    // Sending appropriate response to Frontend.
     res.status(200).json({
       status: "success",
-      message: "Task Deleted Successfully!",
-      taskId, // This will be used in Frontend to update the task list.
+      message: "Task Deleted Successfully",
+      taskId: id,
     });
-  } catch (err: any) {
-    console.error("Task Deletion Error: ", err.message);
-    res.status(500).json({
-      status: "failure",
-      message: `Problem Deleting Task. \nPlease try again later!`,
-    });
+  } catch (error) {
+    console.error("Task Deletion Server Error");
+    next(error);
   }
 };
 
