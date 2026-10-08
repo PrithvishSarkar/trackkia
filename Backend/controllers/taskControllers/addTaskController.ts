@@ -1,68 +1,51 @@
-import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { tasks } from "../../drizzle_essentials/schema.js";
+import type { Request, Response, NextFunction } from "express";
+import addTaskUserInputValidate from "@/utils/addTaskUserInputValidate.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import CustomError from "@/customError.js";
+import { tasks } from "@/database/schema.js";
 
-// Extend Express Request interface to include 'user'.
-declare global {
-  namespace Express {
-    interface Request {
-      userId: number;
-    }
-  }
+interface RequestBody {
+  title: string;
+  description: string;
+  priority: "Low Priority" | "Medium Priority" | "High Priority";
+  startingDate: Date;
+  deadline: Date;
 }
 
-const addTaskController = async (req: Request, res: Response) => {
+const addTaskController = async (
+  req: Request<{}, {}, RequestBody>,
+  res: Response,
+  next: NextFunction,
+) => {
   const userId = req.userId;
+  const { title, description, priority, startingDate, deadline } = req.body;
 
-  interface RequestBodyType {
-    title: string;
-    description: string;
-    priority: "Low Priority" | "Medium Priority" | "High Priority";
-    startingDate: string;
-    deadline: string;
-  }
-
-  const {
-    title,
-    description,
-    priority,
-    startingDate,
-    deadline,
-  }: RequestBodyType = req.body;
-
-  // Check if all values are valid.
-  if (
-    !userId ||
-    !title.trim() ||
-    !description.trim() ||
-    !priority.trim() ||
-    !startingDate.trim() ||
-    !deadline.trim()
-  ) {
-    res
-      .status(400)
-      .json({ status: "failure", message: "Credentials cannot be empty!" });
-    return;
-  }
-
-  // Add to Database.
   try {
-    await db.insert(tasks).values({
+    // Check if user input is valid.
+    const isUserInputValid: boolean = addTaskUserInputValidate(
+      userId,
       title,
       description,
       priority,
-      userId,
-      startingDate: new Date(startingDate),
-      deadline: new Date(deadline),
+      startingDate,
+      deadline,
+    );
+
+    if (!isUserInputValid)
+      throw new CustomError("Missing Required Fields", 400);
+
+    await dbConnection
+      .insert(tasks)
+      .values({ title, description, priority, userId, startingDate, deadline });
+
+    // Sending appropriate response to Frontend.
+    res.status(201).json({
+      status: "success",
+      message: "Task Added Successfully",
     });
-    res
-      .status(201)
-      .json({ status: "success", message: "Task Added Successfully!" });
-  } catch (err: any) {
-    console.error(err.message);
-    res
-      .status(500)
-      .json({ status: "failure", message: "Problem Inserting Task!" });
+  } catch (error) {
+    console.error("Add Task Server Error");
+    next(error);
   }
 };
 
