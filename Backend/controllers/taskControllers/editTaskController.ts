@@ -1,45 +1,56 @@
-import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { tasks } from "../../drizzle_essentials/schema.js";
-import { eq } from "drizzle-orm";
+import type { Request, Response, NextFunction } from "express";
+import { dbConnection } from "@/database/dbConnection.js";
+import { tasks } from "@/database/schema.js";
+import { eq, and } from "drizzle-orm";
+import CustomError from "@/customError.js";
 
-const editTaskController = async (req: Request, res: Response) => {
-  interface RequestBodyType {
-    title: string;
-    description: string;
-    priority: "Low Priority" | "Medium Priority" | "High Priority";
-    startingDate: string;
-    deadline: string;
-  }
-  const {
-    title,
-    description,
-    priority,
-    startingDate,
-    deadline,
-  }: RequestBodyType = req.body;
-  const taskId: number = Number(req.params.id);
+interface RequestBody {
+  title: string;
+  description: string;
+  priority: "Low Priority" | "Medium Priority" | "High Priority";
+  startingDate: Date;
+  deadline: Date;
+}
+
+interface EditedTaskDetails extends RequestBody {
+  id: number;
+}
+
+const editTaskController = async (
+  req: Request<{ id: string }, {}, RequestBody>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const userId: number = req.userId;
+  const taskId: number = parseInt(req.params.id);
+  const { title, description, priority, startingDate, deadline } = req.body;
 
   try {
-    const updatedData = {
-      title,
-      description,
-      priority,
-      startingDate: new Date(startingDate),
-      deadline: new Date(deadline),
-    };
-    await db.update(tasks).set(updatedData).where(eq(tasks.id, taskId));
+    const editedTaskArray: EditedTaskDetails[] = await dbConnection
+      .update(tasks)
+      .set({ title, description, priority, startingDate, deadline })
+      .where(and(eq(tasks.userId, userId), eq(tasks.id, taskId)))
+      .returning({
+        id: tasks.id,
+        title: tasks.title,
+        description: tasks.description,
+        priority: tasks.priority,
+        startingDate: tasks.startingDate,
+        deadline: tasks.deadline,
+      });
+    const editedTask: EditedTaskDetails | undefined = editedTaskArray[0];
+    if (!editedTask)
+      throw new CustomError("Problem Editing Task - Try Editing Again", 500);
+
+    // Sending appropriate response to Frontend.
     res.status(200).json({
       status: "success",
-      message: "Task Updated Successfully!",
-      updatedTask: {id: taskId, ...updatedData},
+      message: "Task Updated Successfully",
+      updatedTask: editedTask,
     });
-  } catch (err: any) {
-    console.error("Edit Task Error: ", err.message);
-    res.status(500).json({
-      status: "failure",
-      message: `Problem Editing Task. \nPlease try again later!`,
-    });
+  } catch (error) {
+    console.error("Task Editing Server Error");
+    next(error);
   }
 };
 
