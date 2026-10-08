@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import type { Priority } from "@/controllers/taskControllers/addTaskController.js";
 import { dbConnection } from "@/database/dbConnection.js";
 import { tasks } from "@/database/schema.js";
 import { eq, and } from "drizzle-orm";
@@ -8,7 +9,7 @@ import addOrEditInputValidate from "@/utils/addOrEditInputValidate.js";
 interface RequestBody {
   title: string;
   description: string;
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
+  priority: Priority;
   startingDate: Date;
   deadline: Date;
 }

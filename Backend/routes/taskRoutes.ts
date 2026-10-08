@@ -1,11 +1,11 @@
 import express from "express";
-import allTasksController from "../controllers/taskControllers/allTasksController.js";
-import analyticsController from "../controllers/taskControllers/analyticsController.js";
-import addTaskController from "../controllers/taskControllers/addTaskController.js";
-import editTaskController from "../controllers/taskControllers/editTaskController.js";
-import editStatusController from "../controllers/taskControllers/editStatusController.js";
-import deleteTaskController from "../controllers/taskControllers/deleteTaskController.js";
-import { protectedRouteMiddleware } from "../middleware.js";
+import allTasksController from "@/controllers/taskControllers/allTasksController.js";
+import analyticsController from "@/controllers/taskControllers/analyticsController.js";
+import addTaskController from "@/controllers/taskControllers/addTaskController.js";
+import editTaskController from "@/controllers/taskControllers/editTaskController.js";
+import editStatusController from "@/controllers/taskControllers/editStatusController.js";
+import deleteTaskController from "@/controllers/taskControllers/deleteTaskController.js";
+import { protectedRouteMiddleware } from "@/authMiddleware.js";
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ const router = express.Router();
 router.get("/all-tasks", protectedRouteMiddleware, allTasksController);
 router.get("/analytics", protectedRouteMiddleware, analyticsController);
 router.post("/add-task", protectedRouteMiddleware, addTaskController);
-router.patch("/edit-task/:id", editTaskController);
-router.patch("/edit-status/:id", editStatusController);
-router.delete("/delete-task/:id", deleteTaskController);
+router.patch("/edit-task/:id", protectedRouteMiddleware, editTaskController);
+router.patch("/edit-status/:id", protectedRouteMiddleware, editStatusController);
+router.delete("/delete-task/:id", protectedRouteMiddleware, deleteTaskController);
 
 export default router;

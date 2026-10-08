@@ -1,20 +1,23 @@
 import type { Request, Response, NextFunction } from "express";
+import type { RequestBody as Status } from "@/controllers/taskControllers/editStatusController.js";
 import addTaskUserInputValidate from "@/utils/addOrEditInputValidate.js";
 import { dbConnection } from "@/database/dbConnection.js";
 import CustomError from "@/customError.js";
 import { tasks } from "@/database/schema.js";
 
+export type Priority = "Low Priority" | "Medium Priority" | "High Priority";
+
 interface RequestBody {
   title: string;
   description: string;
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
+  priority: Priority;
   startingDate: Date;
   deadline: Date;
 }
 
 interface AddedTaskDetails extends RequestBody {
   id: number;
-  status: "Pending" | "In Progress" | "Completed";
+  status: Status;
 }
 
 const requiredFields = {

@@ -1,122 +1,61 @@
-import type { Request, Response } from "express";
-import db from "../../database/dbConnection.js";
-import { tasks } from "../../drizzle_essentials/schema.js";
-import { eq } from "drizzle-orm";
+import type { Request, Response, NextFunction } from "express";
+import type { Priority } from "./addTaskController.js";
+import type { RequestBody as Status } from "@/controllers/taskControllers/editStatusController.js";
+import { dbConnection } from "@/database/dbConnection.js";
+import { tasks } from "@/database/schema.js";
+import { count, eq } from "drizzle-orm";
+import CustomError from "@/customError.js";
 
-// Extend Express Request interface to include 'user'.
-declare global {
-  namespace Express {
-    interface Request {
-      userId: number;
-    }
-  }
-}
-
-interface StatusAnalyticsType {
-  name: "Pending" | "In Progress" | "Completed";
+interface PriorityAnalytics {
+  priority: Priority;
   count: number;
 }
 
-interface PriorityAnalyticsType {
-  name: "Low Priority" | "Medium Priority" | "High Priority";
+interface StatusAnalytics {
+  status: Status;
   count: number;
 }
 
-interface CountStatusPriorityType {
-  status: "Pending" | "In Progress" | "Completed";
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
-}
-
-// This function counts the number of tasks status and priority.
-const countStatusPriority = (
-  taskStatusPriorityData: CountStatusPriorityType[]
+const analyticsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
-  const analyticsCount = {
-    pendingCount: 0,
-    inProgressCount: 0,
-    completedCount: 0,
-    lowPriorityCount: 0,
-    mediumPriorityCount: 0,
-    highPriorityCount: 0,
-  };
-  taskStatusPriorityData.forEach(({ status, priority }) => {
-    switch (status) {
-      case "Pending":
-        analyticsCount.pendingCount++;
-        break;
-      case "In Progress":
-        analyticsCount.inProgressCount++;
-        break;
-      case "Completed":
-        analyticsCount.completedCount++;
-        break;
-      default:
-        break;
-    }
-    switch (priority) {
-      case "Low Priority":
-        analyticsCount.lowPriorityCount++;
-        break;
-      case "Medium Priority":
-        analyticsCount.mediumPriorityCount++;
-        break;
-      case "High Priority":
-        analyticsCount.highPriorityCount++;
-        break;
-      default:
-        break;
-    }
-  });
-  return analyticsCount;
-};
-
-const analyticsController = async (req: Request, res: Response) => {
   const userId: number = req.userId;
+
   try {
-    const taskStatusPriorityData = await db
-      .select({ status: tasks.status, priority: tasks.priority })
+    // Calculate the total number of tasks listed by the user.
+    const totalTasks: number = await dbConnection.$count(
+      tasks,
+      eq(tasks.userId, userId),
+    );
+    if (totalTasks === 0) throw new CustomError("Tasks Not Available", 404);
+
+    // Counting tasks priority-wise.
+    const priorityAnalytics: PriorityAnalytics[] = await dbConnection
+      .select({ priority: tasks.priority, count: count(tasks.id) })
       .from(tasks)
-      .where(eq(tasks.userId, userId));
+      .where(eq(tasks.userId, userId))
+      .groupBy(tasks.priority);
 
-    if (taskStatusPriorityData.length === 0) {
-      res.status(404).json({
-        // Status is Success because Database operation is performed successfully.
-        status: "success",
-        message: `Analytics Data Fetched Successfully. \nNot Task Found!`,
-        statusAnalytics: null,
-        priorityAnalytics: null,
-      });
-      return;
-    }
+    // Counting tasks status-wise.
+    const statusAnalytics: StatusAnalytics[] = await dbConnection
+      .select({ status: tasks.status, count: count(tasks.id) })
+      .from(tasks)
+      .where(eq(tasks.userId, userId))
+      .groupBy(tasks.status);
 
-    // Calculating analytics count using fetched data from Database.
-    const analyticsCount = countStatusPriority(taskStatusPriorityData);
-
-    // Defining analytics Arrays that stores counts of status and priority.
-    const statusAnalytics: StatusAnalyticsType[] = [
-      { name: "Pending", count: analyticsCount.pendingCount },
-      { name: "In Progress", count: analyticsCount.inProgressCount },
-      { name: "Completed", count: analyticsCount.completedCount },
-    ];
-    const priorityAnalytics: PriorityAnalyticsType[] = [
-      { name: "Low Priority", count: analyticsCount.lowPriorityCount },
-      { name: "Medium Priority", count: analyticsCount.mediumPriorityCount },
-      { name: "High Priority", count: analyticsCount.highPriorityCount },
-    ];
-
+    // Sending appropriate response to Frontend.
     res.status(200).json({
       status: "success",
-      message: "Analytics Data Fetched Successfully!",
-      statusAnalytics,
+      message: "Analytics Data Fetched Successfully",
       priorityAnalytics,
-      totalTasks: taskStatusPriorityData.length,
+      statusAnalytics,
+      totalTasks,
     });
-  } catch (err: any) {
-    console.error("Task Analytics Fetching Error: ", err.message);
-    res.status(500).json({
-      status: "failure",
-      message: `Problem Fetching Analytics Data. \nPlease refresh the page!`,
-    });
+  } catch (error) {
+    console.error("Task Analytics Fetching Server Error");
+    next(error);
   }
 };
 

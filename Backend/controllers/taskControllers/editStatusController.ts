@@ -4,7 +4,7 @@ import { tasks } from "@/database/schema.js";
 import { and, eq } from "drizzle-orm";
 import CustomError from "@/customError.js";
 
-type RequestBody = "Pending" | "In Progress" | "Completed";
+export type RequestBody = "Pending" | "In Progress" | "Completed";
 interface TaskDetails {
   id: number;
   status: RequestBody;

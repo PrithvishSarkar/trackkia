@@ -1,13 +1,13 @@
 import express from "express";
-import userNameController from "../controllers/authControllers/userNameController.js";
-import registerController from "../controllers/authControllers/registerController.js";
-import loginController from "../controllers/authControllers/loginController.js";
-import sendOtpController from "../controllers/authControllers/sendOtpController.js";
-import resendOtpController from "../controllers/authControllers/resendOtpController.js";
-import verifyOtpController from "../controllers/authControllers/verifyOtpController.js";
-import resetPwdController from "../controllers/authControllers/resetPwdController.js";
-import logoutController from "../controllers/authControllers/logoutController.js";
-import { protectedRouteMiddleware } from "../middleware.js";
+import userNameController from "@/controllers/authControllers/userNameController.js";
+import registerController from "@/controllers/authControllers/registerController.js";
+import loginController from "@/controllers/authControllers/loginController.js";
+import sendOtpController from "@/controllers/authControllers/sendOtpController.js";
+import resendOtpController from "@/controllers/authControllers/resendOtpController.js";
+import verifyOtpController from "@/controllers/authControllers/verifyOtpController.js";
+import resetPwdController from "@/controllers/authControllers/resetPwdController.js";
+import logoutController from "@/controllers/authControllers/logoutController.js";
+import { protectedRouteMiddleware } from "@/authMiddleware.js";
 
 const router = express.Router();
 
