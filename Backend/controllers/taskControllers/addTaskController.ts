@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import type { RequestBody as Status } from "@/controllers/taskControllers/editStatusController.js";
-import addTaskUserInputValidate from "@/utils/addOrEditInputValidate.js";
+import type { ReturnType as UserInputValidate } from "@/utils/taskUserInputValidate.js";
+import taskUserInputValidate from "@/utils/taskUserInputValidate.js";
 import { dbConnection } from "@/database/dbConnection.js";
 import CustomError from "@/customError.js";
 import { tasks } from "@/database/schema.js";
@@ -11,12 +12,17 @@ interface RequestBody {
   title: string;
   description: string;
   priority: Priority;
-  startingDate: Date;
-  deadline: Date;
+  startingDate: string;
+  deadline: string;
 }
 
-interface AddedTaskDetails extends RequestBody {
+interface AddedTaskDetails extends Omit<
+  RequestBody,
+  "startingDate" | "deadline"
+> {
   id: number;
+  startingDate: Date;
+  deadline: Date;
   status: Status;
 }
 
@@ -40,21 +46,30 @@ const addTaskController = async (
 
   try {
     // Check if user input is valid.
-    const isUserInputValid: boolean = addTaskUserInputValidate(
-      userId,
-      title,
-      description,
-      priority,
-      startingDate,
-      deadline,
-    );
-
-    if (!isUserInputValid)
-      throw new CustomError("Missing Required Fields", 400);
+    const userInputValidityStatus: UserInputValidate =
+      taskUserInputValidate(
+        userId,
+        title,
+        description,
+        priority,
+        startingDate,
+        deadline,
+      );
+    if (!userInputValidityStatus.isValid)
+      throw new CustomError(userInputValidityStatus.errorText, 400);
 
     const newTaskArray: AddedTaskDetails[] = await dbConnection
       .insert(tasks)
-      .values({ title, description, priority, userId, startingDate, deadline })
+      .values({
+        title,
+        description,
+        priority,
+        userId,
+
+        // Convert starting date and deadline strings to Date object then insert.
+        startingDate: new Date(startingDate),
+        deadline: new Date(deadline),
+      })
       .returning(requiredFields);
     const newTaskDetails: AddedTaskDetails | undefined = newTaskArray[0];
     if (!newTaskDetails)
