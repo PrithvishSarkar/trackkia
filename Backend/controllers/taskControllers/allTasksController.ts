@@ -1,7 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { dbConnection } from "@/database/dbConnection.js";
 import { tasks } from "@/database/schema.js";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
+import CustomError from "@/customError.js";
 
 interface TaskData {
   id: number;
@@ -20,10 +21,21 @@ const allTasksController = async (
 ) => {
   const userId: number = req.userId;
   const taskLimit: number = 6;
-  const pageNumber: number = parseInt(req.query.page);
+  const pageNumber: number =
+    req.query.page !== undefined ? parseInt(req.query.page) : 1;
   const taskOffset: number = (pageNumber - 1) * taskLimit;
 
   try {
+    // Counting total number of user's tasks.
+    const totalTasks: number = await dbConnection.$count(
+      tasks,
+      eq(tasks.userId, userId),
+    );
+    if (totalTasks === 0)
+      throw new CustomError("Task Not Available - Try Adding Tasks", 404);
+
+    const totalPages: number = Math.ceil(totalTasks / taskLimit);
+
     // Extracting limited tasks of a user according to page number.
     const taskList: TaskData[] = await dbConnection
       .select({
@@ -37,15 +49,9 @@ const allTasksController = async (
       })
       .from(tasks)
       .where(eq(tasks.userId, userId))
-      .offset(taskOffset)
-      .limit(taskLimit);
-
-    // Counting total number of user's tasks.
-    const totalTasks: number = await dbConnection.$count(
-      tasks,
-      eq(tasks.userId, userId),
-    );
-    const totalPages: number = Math.ceil(totalTasks / taskLimit);
+      .orderBy(desc(tasks.id)) // Sorting rows in descending order of ID.
+      .offset(taskOffset) // Pushing past a certain number of rows from table top.
+      .limit(taskLimit); // Extracting only a certain number of row's data.
 
     // Sending appropriate response to Frontend.
     res.status(200).json({
