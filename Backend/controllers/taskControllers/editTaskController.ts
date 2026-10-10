@@ -1,21 +1,27 @@
 import type { Request, Response, NextFunction } from "express";
 import type { Priority } from "@/controllers/taskControllers/addTaskController.js";
+import type { ReturnType as UserInputValidate } from "@/utils/taskUserInputValidate.js";
+import addOrEditInputValidate from "@/utils/taskUserInputValidate.js";
 import { dbConnection } from "@/database/dbConnection.js";
 import { tasks } from "@/database/schema.js";
-import { eq, and } from "drizzle-orm";
 import CustomError from "@/customError.js";
-import addOrEditInputValidate from "@/utils/addOrEditInputValidate.js";
+import { eq, and } from "drizzle-orm";
 
 interface RequestBody {
   title: string;
   description: string;
   priority: Priority;
-  startingDate: Date;
-  deadline: Date;
+  startingDate: string;
+  deadline: string;
 }
 
-interface EditedTaskDetails extends RequestBody {
+interface EditedTaskDetails extends Omit<
+  RequestBody,
+  "startingDate" | "deadline"
+> {
   id: number;
+  startingDate: Date;
+  deadline: Date;
 }
 
 const editTaskController = async (
@@ -29,7 +35,7 @@ const editTaskController = async (
 
   try {
     // Check if user input is valid.
-    const isUserInputValid: boolean = addOrEditInputValidate(
+    const userInputValidatyStatus: UserInputValidate = addOrEditInputValidate(
       userId,
       title,
       description,
@@ -37,13 +43,19 @@ const editTaskController = async (
       startingDate,
       deadline,
     );
-    if (!isUserInputValid)
-      throw new CustomError("Missing Required Fields", 400);
+    if (!userInputValidatyStatus.isValid)
+      throw new CustomError(userInputValidatyStatus.errorText, 400);
 
     // Update DB field values.
     const editedTaskArray: EditedTaskDetails[] = await dbConnection
       .update(tasks)
-      .set({ title, description, priority, startingDate, deadline })
+      .set({
+        title,
+        description,
+        priority,
+        startingDate: new Date(startingDate),
+        deadline: new Date(deadline),
+      })
       .where(and(eq(tasks.userId, userId), eq(tasks.id, taskId)))
       .returning({
         id: tasks.id,
