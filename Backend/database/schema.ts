@@ -42,6 +42,7 @@ export const tasks = pgTable("tasks", {
   status: statusEnum("status").notNull().default("Pending"),
   userId: integer("userId")
     .notNull()
+    .unique()
     .references(() => users.id, { onDelete: "cascade" }),
 
   // Frontend will provide the data for 'date'.
