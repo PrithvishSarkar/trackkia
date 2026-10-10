@@ -7,11 +7,11 @@ import { generateOTP, hashOTP } from "@/utils/otpGenerateAndHash.js";
 import sendOTP from "@/utils/sendOtpOnEmail.js";
 
 const sendOtpController = async (
-  req: Request,
+  req: Request<{}, {}, { email: string }>,
   res: Response,
   next: NextFunction,
 ) => {
-  const email: string = req.body;
+  const { email } = req.body;
 
   try {
     // Checking if email is valid or not.
@@ -25,15 +25,24 @@ const sendOtpController = async (
     const userId: number | undefined = user[0]?.id;
     if (!userId) throw new CustomError("User Not Found", 404);
 
-    // Generate and hash OTP then store it in DB.
+    // Generate and hash OTP then upsert it in DB.
     const OTP: string = generateOTP();
     const hashedOTP: string = await hashOTP(OTP);
-    await dbConnection.insert(otps).values({
-      otp: hashedOTP,
-      otpExpiry: new Date(Date.now() + 5 * 60 * 1000),
-      userId,
-    });
-
+    await dbConnection
+      .insert(otps)
+      .values({
+        otp: hashedOTP,
+        otpExpiry: new Date(Date.now() + 5 * 60 * 1000),
+        userId,
+      })
+      .onConflictDoUpdate({
+        target: otps.userId,
+        set: {
+          otp: hashedOTP,
+          otpExpiry: new Date(Date.now() + 5 * 60 + 1000),
+        },
+      });
+    
     // Sending OTP via email.
     // The 'Send OTP' button in Frontend freezes once the OTP is sent.
     await sendOTP(email, OTP, res, next, userId);

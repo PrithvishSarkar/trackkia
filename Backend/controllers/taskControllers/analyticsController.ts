@@ -29,7 +29,8 @@ const analyticsController = async (
       tasks,
       eq(tasks.userId, userId),
     );
-    if (totalTasks === 0) throw new CustomError("Tasks Not Available", 404);
+    if (totalTasks === 0)
+      throw new CustomError("Tasks Not Available - Try Adding Tasks", 404);
 
     // Counting tasks priority-wise.
     const priorityAnalytics: PriorityAnalytics[] = await dbConnection
