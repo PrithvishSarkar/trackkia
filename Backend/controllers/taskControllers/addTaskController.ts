@@ -46,40 +46,32 @@ const addTaskController = async (
 
   try {
     // Check if user input is valid.
-    const userInputValidityStatus: UserInputValidate =
-      taskUserInputValidate(
-        userId,
-        title,
-        description,
-        priority,
-        startingDate,
-        deadline,
-      );
+    const userInputValidityStatus: UserInputValidate = taskUserInputValidate(
+      userId,
+      title,
+      description,
+      priority,
+      startingDate,
+      deadline,
+    );
     if (!userInputValidityStatus.isValid)
       throw new CustomError(userInputValidityStatus.errorText, 400);
 
-    const newTaskArray: AddedTaskDetails[] = await dbConnection
-      .insert(tasks)
-      .values({
-        title,
-        description,
-        priority,
-        userId,
+    await dbConnection.insert(tasks).values({
+      title,
+      description,
+      priority,
+      userId,
 
-        // Convert starting date and deadline strings to Date object then insert.
-        startingDate: new Date(startingDate),
-        deadline: new Date(deadline),
-      })
-      .returning(requiredFields);
-    const newTaskDetails: AddedTaskDetails | undefined = newTaskArray[0];
-    if (!newTaskDetails)
-      throw new CustomError("Added Task Details Not Fetched", 500);
+      // Convert starting date and deadline strings to Date object then insert.
+      startingDate: new Date(startingDate),
+      deadline: new Date(deadline),
+    });
 
     // Sending appropriate response to Frontend.
     res.status(201).json({
       status: "success",
       message: "Task Added Successfully",
-      newTask: newTaskDetails,
     });
   } catch (error) {
     console.error("Add Task Server Error");

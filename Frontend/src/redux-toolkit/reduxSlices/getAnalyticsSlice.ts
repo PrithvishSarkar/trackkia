@@ -2,12 +2,12 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface StatusAnalyticsType {
   name: "Pending" | "In Progress" | "Completed";
-  count: number;
+  value: number;
 }
 
 interface PriorityAnalyticsType {
   name: "Low Priority" | "Medium Priority" | "High Priority";
-  count: number;
+  value: number;
 }
 
 interface InitialStateType {

@@ -1,16 +1,23 @@
 import { Container } from "react-bootstrap";
 import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Tooltip,
+  type PieSectorShapeProps,
+  Sector
+} from "recharts";
 import styles from "../../Components/cssModules/analytics.module.css";
 
 interface StatusAnalyticsType {
   name: "Pending" | "In Progress" | "Completed";
-  count: number;
+  value: number;
 }
 
 interface PriorityAnalyticsType {
   name: "Low Priority" | "Medium Priority" | "High Priority";
-  count: number;
+  value: number;
 }
 
 interface AnalyticsChartPropType {
@@ -19,6 +26,12 @@ interface AnalyticsChartPropType {
   totalTasks: number;
   innerRadius: number;
 }
+
+const colors = ["#ef4444", "#eab308", "#10b981"];
+
+const MyCustomPie = (props: PieSectorShapeProps) => (
+  <Sector {...props} fill={colors[props.index % colors.length]} />
+);
 
 const AnalyticsChart = ({
   title,
@@ -43,24 +56,14 @@ const AnalyticsChart = ({
         <PieChart>
           <Pie
             data={analyticsArray}
-            dataKey="count"
             cx="50%"
             cy="50%"
             innerRadius={innerRadius}
             label
-            fill="#82ca9d"
+            fill="#111"
+            shape={MyCustomPie}
           >
-            {analyticsArray.map(
-              (
-                entry: StatusAnalyticsType | PriorityAnalyticsType,
-                index: number
-              ) => {
-                const COLORS = ["#ef4444", "#eab308", "#10b981"];
-                return (
-                  <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-                );
-              }
-            )}
+            <Tooltip />
           </Pie>
           {/* Text inside Donut */}
           <text

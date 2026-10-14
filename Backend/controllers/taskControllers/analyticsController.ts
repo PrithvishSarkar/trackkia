@@ -7,13 +7,13 @@ import { count, eq } from "drizzle-orm";
 import CustomError from "@/customError.js";
 
 interface PriorityAnalytics {
-  priority: Priority;
-  count: number;
+  name: Priority;
+  value: number;
 }
 
 interface StatusAnalytics {
-  status: Status;
-  count: number;
+  name: Status;
+  value: number;
 }
 
 const analyticsController = async (
@@ -34,14 +34,14 @@ const analyticsController = async (
 
     // Counting tasks priority-wise.
     const priorityAnalytics: PriorityAnalytics[] = await dbConnection
-      .select({ priority: tasks.priority, count: count(tasks.id) })
+      .select({ name: tasks.priority, value: count(tasks.id) })
       .from(tasks)
       .where(eq(tasks.userId, userId))
       .groupBy(tasks.priority);
 
     // Counting tasks status-wise.
     const statusAnalytics: StatusAnalytics[] = await dbConnection
-      .select({ status: tasks.status, count: count(tasks.id) })
+      .select({ name: tasks.status, value: count(tasks.id) })
       .from(tasks)
       .where(eq(tasks.userId, userId))
       .groupBy(tasks.status);

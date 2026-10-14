@@ -16,7 +16,7 @@ const handleTaskStatusChange = async (
   id: number,
   status: "Pending" | "In Progress" | "Completed",
   dispatch: AppDispatch,
-  taskList: TaskType[]
+  taskList: TaskType[],
 ) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const EDIT_STATUS_PATH = import.meta.env.VITE_EDIT_STATUS_PATH;
@@ -37,7 +37,8 @@ const handleTaskStatusChange = async (
     case "success":
       toast.success(response.message);
       const updatedTaskList = taskList.map((task: TaskType) => {
-        if (task.id === id) return { ...task, status: response.taskStatus };
+        if (task.id === response.updatedTask.id)
+          return { ...task, status: response.updatedTask.status };
         else return task;
       });
       dispatch(setTaskList(updatedTaskList));
