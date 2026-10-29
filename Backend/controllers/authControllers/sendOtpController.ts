@@ -45,7 +45,7 @@ const sendOtpController = async (
     
     // Sending OTP via email.
     // The 'Send OTP' button in Frontend freezes once the OTP is sent.
-    await sendOTP(email, OTP, res, next, userId);
+    sendOTP(email, OTP, res, next, userId);
   } catch (error) {
     console.error("Sending OTP Server Error");
     next(error);

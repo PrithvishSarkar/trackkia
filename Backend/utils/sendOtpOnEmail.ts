@@ -1,4 +1,4 @@
-import type { NextFunction, Response } from "express";
+import type { Response, NextFunction } from "express";
 import nodemailer from "nodemailer";
 
 const sendOTP = async (
@@ -8,30 +8,34 @@ const sendOTP = async (
   next: NextFunction,
   userId: number,
 ) => {
-  // Create a Transporter with appropriate values.
+  // Creating Email Transporter
   const transporter = nodemailer.createTransport({
-    service: process.env.SMPT_SERVER,
+    service: process.env.SMTP_SERVICE,
     auth: {
-      user: process.env.EMAIL_SENDER,
-      pass: process.env.APP_PASSWORD,
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
-  // Sending Email to the User.
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_SENDER,
-      to: email,
-      subject: "Trackkia Email Verification for Password Reset",
-      text: `Your 4 digit OTP is ${OTP} which is valid only for only 5 minutes.`,
-    });
 
+  // Composing Message
+  const message = {
+    from: process.env.SMTP_EMAIL,
+    to: email,
+    subject: "Trackkia Email Verification for Password Reset",
+    text: `Your 4 digit OTP is ${OTP} which is valid only for only 5 minutes.`,
+  };
+
+  // Sending Email
+  try {
+    await transporter.sendMail(message);
+    
     res.status(200).json({
       status: "success",
       message: `OTP Sent - Check Your Email`,
       userId,
     });
   } catch (error) {
-    console.error("OTP Resend Server Error");
+    console.error("Sending Email Server Error");
     next(error);
   }
 };

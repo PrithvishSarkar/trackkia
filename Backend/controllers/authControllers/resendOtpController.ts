@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { generateOTP, hashOTP } from "@/utils/otpGenerateAndHash.js";
 import sendOTP from "@/utils/sendOtpOnEmail.js";
 import { dbConnection } from "@/database/dbConnection.js";
-import { users, otps } from "@/database/schema.js";
+import { otps } from "@/database/schema.js";
 import { eq } from "drizzle-orm";
 
 const resentOtpController = async (
@@ -29,7 +29,7 @@ const resentOtpController = async (
     await dbConnection
       .update(otps)
       .set({ otp: hashedOTP, otpExpiry: new Date(Date.now() + 5 * 60 * 1000) })
-      .where(eq(users.id, userId));
+      .where(eq(otps.userId, userId));
 
     // Resend OTP via email.
     await sendOTP(email, OTP, res, next, userId);
