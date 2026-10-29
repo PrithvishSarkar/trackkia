@@ -1,23 +1,19 @@
 import React from "react";
+import type { CreateThemeContext } from "@/interfaces.js";
 
-interface CreateContextType {
-  theme: string;
-  setTheme: React.Dispatch<React.SetStateAction<string>>;
-}
-const ThemeContext = React.createContext<CreateContextType>({
-  theme: "",
+/* ===== Creating and Exporting Context API ===== */
+const ThemeContext = React.createContext<CreateThemeContext>({
+  theme: "dark",
   setTheme: () => {},
 });
 export const useThemeContext = () => React.useContext(ThemeContext);
 
-// Theme Context Wrapper Component.
-interface ThemeContextWrapperType {
+/* ===== Wrapping Context API Provider within a Functional Component ===== */
+interface ThemeContextWrapperProp {
   children: React.ReactNode;
 }
-const ThemeContextWrapper: React.FC<ThemeContextWrapperType> = ({
-  children,
-}) => {
-  const [theme, setTheme] = React.useState("dark");
+const ThemeContextWrapper = ({ children }: ThemeContextWrapperProp) => {
+  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}

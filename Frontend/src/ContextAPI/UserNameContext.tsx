@@ -1,21 +1,18 @@
 import React from "react";
+import type { CreateUserNameContext } from "@/interfaces.js";
 
-interface UserNameContextType {
-  userName: string;
-  setUserName: React.Dispatch<React.SetStateAction<string>>;
-}
-const UserNameContext = React.createContext<UserNameContextType>({
+/* ===== Creating and Exporting Context API ===== */
+const UserNameContext = React.createContext<CreateUserNameContext>({
   userName: "",
   setUserName: () => {},
 });
 export const useUserNameContext = () => React.useContext(UserNameContext);
 
-interface UserNameContextWrapperType {
+/* ===== Wrapping Context API Provider within a Functional Component ===== */
+interface UserNameContextWrapperProp {
   children: React.ReactNode;
 }
-const UserNameContextWrapper: React.FC<UserNameContextWrapperType> = ({
-  children,
-}) => {
+const UserNameContextWrapper = ({ children }: UserNameContextWrapperProp) => {
   const [userName, setUserName] = React.useState("");
   return (
     <UserNameContext.Provider value={{ userName, setUserName }}>
