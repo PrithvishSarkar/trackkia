@@ -4,7 +4,7 @@ config({ path: path.resolve(process.cwd(), ".env") });
 
 import { defineConfig } from "drizzle-kit";
 
-const dbConnectionString: string | undefined = process.env.DB_SESSION_POOLER_URL;
+const dbConnectionString: string | undefined = process.env.DATABASE_URL;
 if (!dbConnectionString)
   throw new Error("Environment Variable DB Connection String Missing!");
 
