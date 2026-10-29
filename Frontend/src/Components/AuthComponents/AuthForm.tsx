@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "../../Components/cssModules/authForm.module.css";
+
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { MdAlternateEmail, MdWifiPassword } from "react-icons/md";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { LuLogIn } from "react-icons/lu";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   setName,
@@ -13,19 +15,16 @@ import {
   setShowPassword,
 } from "../../redux-toolkit/reduxSlices/authFormSlice.js";
 import type { RootState, AppDispatch } from "../../redux-toolkit/reduxStore.js";
+
 import { useNavigate } from "react-router";
 import handleSubmit from "../../helperFunctions/authFormSubmit.js";
 import authFormPwdStrength from "../../helperFunctions/authFormPwdStrength.js";
 import { useUserNameContext } from "../../ContextAPI/UserNameContext.jsx";
+import type { AuthFormProp } from "@/interfaces.js";
 
-interface AuthFormParametersType {
-  isRoleRegister: boolean;
-  isThemeDark: boolean;
-}
-
-const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormParametersType) => {
+const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormProp) => {
   /*========================
-  Redux Toolkit Hooks Starts
+  Redux Toolkit Hooks Start
   ========================*/
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -39,7 +38,7 @@ const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormParametersType) => {
     loading,
   } = useSelector((state: RootState) => state.authForm);
   /*======================
-  Redux Toolkit Hooks Ends
+  Redux Toolkit Hooks End
   ======================*/
 
   React.useEffect(() => {
