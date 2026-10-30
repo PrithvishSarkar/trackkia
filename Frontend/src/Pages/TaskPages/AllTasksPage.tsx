@@ -1,16 +1,19 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Modal, Image, Container } from "react-bootstrap";
-import TaskCard from "../../Components/TaskComponents/TaskCard.tsx";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
-import PaginationList from "../../Components/TaskComponents/PaginationList.tsx";
-import fetchTasksList from "../../helperFunctions/fetchTasks.js";
-import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
-import dateToString from "../../helperFunctions/dateToString.js";
-import AddEditTaskForm from "../../Components/TaskComponents/AddEditTasksForm.tsx";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
-import { reset } from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
-import { setShowEditModal } from "../../redux-toolkit/reduxSlices/editTaskSlice.js";
+
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
+import { setShowEditModal } from "@/redux-toolkit/reduxSlices/editTaskSlice.js";
+import { reset } from "@/redux-toolkit/reduxSlices/taskFormSlice.js";
+
+import TaskCard from "@/Components/TaskComponents/TaskCard.tsx";
+import Layout from "@/Components/LayoutComponents/Layout.tsx";
+import PaginationList from "@/Components/TaskComponents/PaginationList.tsx";
+import AddEditTaskForm from "@/Components/TaskComponents/AddEditTasksForm.tsx";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+
+import fetchTasksList from "@/helperFunctions/fetchTasks.js";
+import dateToString from "@/helperFunctions/dateToString.js";
 
 const AllTasksPage = () => {
   const { theme } = useThemeContext();

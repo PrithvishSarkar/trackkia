@@ -1,10 +1,13 @@
 import React from "react";
 import { Row, Col, Container, Image } from "react-bootstrap";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
-import AnalyticsChart from "../../Components/TaskComponents/AnalyticsChart.tsx";
+
+import Layout from "@/Components/LayoutComponents/Layout.tsx";
+import AnalyticsChart from "@/Components/TaskComponents/AnalyticsChart.tsx";
+
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
-import fetchTasksAnalytics from "../../helperFunctions/fetchAnalytics.js";
+import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
+
+import fetchTasksAnalytics from "@/helperFunctions/fetchAnalytics.js";
 
 const AnalyticsPage = () => {
   const { statusAnalytics, priorityAnalytics, totalTasks } = useSelector(

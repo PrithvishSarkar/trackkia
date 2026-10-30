@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../Components/cssModules/authForm.module.css";
+import styles from "@/Components/cssModules/authForm.module.css";
 
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
@@ -13,13 +13,13 @@ import {
   setEmail,
   setPassword,
   setShowPassword,
-} from "../../redux-toolkit/reduxSlices/authFormSlice.js";
-import type { RootState, AppDispatch } from "../../redux-toolkit/reduxStore.js";
+} from "@/redux-toolkit/reduxSlices/authFormSlice.js";
+import type { RootState, AppDispatch } from "@/redux-toolkit/reduxStore.js";
 
 import { useNavigate } from "react-router";
-import handleSubmit from "../../helperFunctions/authFormSubmit.js";
-import authFormPwdStrength from "../../helperFunctions/authFormPwdStrength.js";
-import { useUserNameContext } from "../../ContextAPI/UserNameContext.jsx";
+import handleSubmit from "@/helperFunctions/authFormSubmit.js";
+import authFormPwdStrength from "@/helperFunctions/authFormPwdStrength.js";
+import { useUserNameContext } from "@/ContextAPI/UserNameContext.jsx";
 import type { AuthFormProp } from "@/interfaces.js";
 
 const AuthForm = ({ isRoleRegister, isThemeDark }: AuthFormProp) => {

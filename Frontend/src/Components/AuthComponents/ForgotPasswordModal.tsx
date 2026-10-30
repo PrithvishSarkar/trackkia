@@ -1,18 +1,23 @@
-import styles from "../../Components/cssModules/authForm.module.css";
+import styles from "@/Components/cssModules/authForm.module.css";
+
 import { Modal, Form, InputGroup, Button } from "react-bootstrap";
+
 import { MdAlternateEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
+import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
 import {
   setEmail,
   setOtp,
-} from "../../redux-toolkit/reduxSlices/forgotPasswordSlice.js";
-import handleSendOtp from "../../helperFunctions/sendOtp.js";
-import handleResendOtp from "../../helperFunctions/resendOtp.js";
-import handleVerifyOtp from "../../helperFunctions/verifyOtp.js";
-import handleHideForgotPwdModal from "../../helperFunctions/hideForgotPwdModal.js";
+} from "@/redux-toolkit/reduxSlices/forgotPasswordSlice.js";
+
+import handleSendOtp from "@/helperFunctions/sendOtp.js";
+import handleResendOtp from "@/helperFunctions/resendOtp.js";
+import handleVerifyOtp from "@/helperFunctions/verifyOtp.js";
+import handleHideForgotPwdModal from "@/helperFunctions/hideForgotPwdModal.js";
 
 const PwdResetModal = () => {
   const { theme } = useThemeContext();

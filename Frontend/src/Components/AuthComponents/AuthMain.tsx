@@ -1,10 +1,14 @@
 import AuthForm from "./AuthForm.tsx";
-import styles from "../cssModules/authForm.module.css";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+
+import styles from "@/cssModules/authForm.module.css";
+
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+
 import { Link } from "react-router";
+
 import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../redux-toolkit/reduxStore.js";
-import { setShowModal } from "../../redux-toolkit/reduxSlices/forgotPasswordSlice.js";
+import type { AppDispatch } from "@/redux-toolkit/reduxStore.js";
+import { setShowModal } from "@/redux-toolkit/reduxSlices/forgotPasswordSlice.js";
 
 const AuthMain = ({ role }: { role: string }) => {
   const { theme } = useThemeContext();

@@ -1,20 +1,24 @@
-import styles from "../../Components/cssModules/authForm.module.css";
+import React from "react";
+import styles from "@/Components/cssModules/authForm.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+
 import { Modal, Form, InputGroup, Button } from "react-bootstrap";
+
 import { MdWifiPassword } from "react-icons/md";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "../../redux-toolkit/reduxStore.js";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+
+import type { RootState, AppDispatch } from "@/redux-toolkit/reduxStore.js";
 import {
   setPassword,
   setShowPassword,
   setConfirmPassword,
   setShowConfirmPassword,
-} from "../../redux-toolkit/reduxSlices/resetPasswordSlice.js";
-import React from "react";
-import resetPasswordStrength from "../../helperFunctions/resetPwdStrength.js";
-import handleHideResetPwdModal from "../../helperFunctions/hideResetPwdModal.js";
-import handleResetPwdSubmit from "../../helperFunctions/resetPwdSubmit.js";
+} from "@/redux-toolkit/reduxSlices/resetPasswordSlice.js";
+
+import resetPasswordStrength from "@/helperFunctions/resetPwdStrength.js";
+import handleHideResetPwdModal from "@/helperFunctions/hideResetPwdModal.js";
+import handleResetPwdSubmit from "@/helperFunctions/resetPwdSubmit.js";
 
 const ResetPasswordModal = () => {
   const { theme } = useThemeContext();
