@@ -1,11 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { EditTaskModalDisplaySliceInitialState as InitialStateInterface } from "@/interfaces.js";
 
-interface InitialStateType {
-  showEditModal: boolean;
-  taskId: number;
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   showEditModal: false,
   taskId: -1,
 };
@@ -15,22 +11,24 @@ const editTaskSlice = createSlice({
   initialState,
   reducers: {
     setShowEditModal: (
-      state: InitialStateType,
-      action: PayloadAction<boolean>
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
     ) => {
       state.showEditModal = action.payload;
     },
-    setTaskId: (state: InitialStateType, action: PayloadAction<number>) => {
+    setTaskId: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.taskId = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.showEditModal = false;
       state.taskId = -1;
     },
   },
 });
 
-export const { setShowEditModal, setTaskId, reset } =
-  editTaskSlice.actions;
+export const { setShowEditModal, setTaskId, reset } = editTaskSlice.actions;
 
 export default editTaskSlice.reducer;

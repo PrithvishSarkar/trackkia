@@ -1,23 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type {
+  GetAllTasksSliceInitialState as InitialStateInterface,
+  TaskCardProp,
+} from "@/interfaces.js";
 
-interface TaskType {
-  id: number;
-  title: string;
-  description: string;
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
-  status: "Pending" | "In Progress" | "Completed";
-  startingDate: string;
-  deadline: string;
-}
-
-interface InitialStateType {
-  totalTasks: number;
-  totalPages: number;
-  pageNumber: number;
-  taskList: TaskType[];
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   totalTasks: 0,
   totalPages: 1,
   pageNumber: 1,
@@ -28,22 +15,31 @@ const getTasksSlice = createSlice({
   name: "taskList",
   initialState,
   reducers: {
-    setTotalTasks: (state: InitialStateType, action: PayloadAction<number>) => {
+    setTotalTasks: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.totalTasks = action.payload;
     },
-    setTotalPages: (state: InitialStateType, action: PayloadAction<number>) => {
+    setTotalPages: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.totalPages = action.payload;
     },
     setTaskList: (
-      state: InitialStateType,
-      action: PayloadAction<TaskType[]>
+      state: InitialStateInterface,
+      action: PayloadAction<Omit<TaskCardProp, "preview">[]>,
     ) => {
       state.taskList = action.payload;
     },
-    setPageNumber: (state: InitialStateType, action: PayloadAction<number>) => {
+    setPageNumber: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.pageNumber = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.totalTasks = 0;
       state.totalPages = 0;
       state.pageNumber = 0;

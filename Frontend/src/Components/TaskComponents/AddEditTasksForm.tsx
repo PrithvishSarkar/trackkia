@@ -13,12 +13,12 @@ import {
 } from "@/redux-toolkit/reduxSlices/taskFormSlice.js";
 
 import handleAddEditTaskFormSubmit from "@/helperFunctions/taskFormSubmit.js";
-import type { AddEditTaskFormProp } from "@/interfaces.js";
+import type { AddEditTaskFormProp, TaskPriority } from "@/interfaces.js";
 
 const AddEditTaskForm = ({ isThemeDark, use }: AddEditTaskFormProp) => {
   const dispatch = useDispatch<AppDispatch>();
   const { title, description, priority, deadline, loading } = useSelector(
-    (state: RootState) => state.taskForm
+    (state: RootState) => state.taskForm,
   );
   const { taskId } = useSelector((state: RootState) => state.editTask);
   const { taskList } = useSelector((state: RootState) => state.taskList);
@@ -36,7 +36,7 @@ const AddEditTaskForm = ({ isThemeDark, use }: AddEditTaskFormProp) => {
           deadline,
           dispatch,
           taskId,
-          taskList
+          taskList,
         )
       }
     >
@@ -96,17 +96,21 @@ const AddEditTaskForm = ({ isThemeDark, use }: AddEditTaskFormProp) => {
         <Form.Select
           required
           value={priority}
-          onChange={(e) => dispatch(setPriority(e.target.value))}
+          onChange={(e) =>
+            dispatch(setPriority(e.target.value as TaskPriority))
+          }
           className={`${styles.formInput} text-primary ${
             isThemeDark && styles.formInputDarkStyle
           }`}
         >
-          {[
-            "--SELECT--",
-            "Low Priority",
-            "Medium Priority",
-            "High Priority",
-          ].map((option, index) => (
+          {(
+            [
+              "--SELECT--",
+              "Low Priority",
+              "Medium Priority",
+              "High Priority",
+            ] as Array<TaskPriority>
+          ).map((option, index) => (
             <option
               value={option}
               className={`${isThemeDark ? "bg-dark" : "bg-light"}`}

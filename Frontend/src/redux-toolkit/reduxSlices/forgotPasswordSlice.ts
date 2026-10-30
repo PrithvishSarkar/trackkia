@@ -1,15 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { ForgotPasswordSliceInitialState as InitialStateInterface } from "@/interfaces.js";
 
-interface InitialStateType {
-  showModal: boolean;
-  email: string;
-  otp: string;
-  userId: number;
-  sendOtpBtnLoading: boolean;
-  verifyOtpBtnLoading: boolean;
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   showModal: false,
   email: "",
   otp: "",
@@ -22,31 +14,37 @@ const forgotPwdSlice = createSlice({
   name: "passwordReset",
   initialState,
   reducers: {
-    setShowModal: (state: InitialStateType, action: PayloadAction<boolean>) => {
+    setShowModal: (
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
+    ) => {
       state.showModal = action.payload;
     },
-    setEmail: (state: InitialStateType, action: PayloadAction<string>) => {
+    setEmail: (state: InitialStateInterface, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
-    setOtp: (state: InitialStateType, action: PayloadAction<string>) => {
+    setOtp: (state: InitialStateInterface, action: PayloadAction<string>) => {
       state.otp = action.payload;
     },
-    setUserId: (state: InitialStateType, action: PayloadAction<number>) => {
+    setUserId: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.userId = action.payload;
     },
     setSendOtpBtnLoading: (
-      state: InitialStateType,
-      action: PayloadAction<boolean>
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
     ) => {
       state.sendOtpBtnLoading = action.payload;
     },
     setVerifyOtpBtnLoading: (
-      state: InitialStateType,
-      action: PayloadAction<boolean>
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
     ) => {
       state.verifyOtpBtnLoading = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.showModal = false;
       state.email = "";
     },

@@ -1,17 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { AuthFormSliceInitialState as InitialStateInterface } from "@/interfaces.js";
 
-interface InitialStateType {
-  name: string;
-  email: string;
-  password: string;
-  showPassword: boolean;
-  passwordStrength: string;
-  showPasswordStrength: boolean;
-  passwordStrengthColor: string;
-  loading: boolean;
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   name: "",
   email: "",
   password: "",
@@ -26,43 +16,49 @@ const authFormSlice = createSlice({
   name: "authForm",
   initialState,
   reducers: {
-    setName: (state: InitialStateType, action: PayloadAction<string>) => {
+    setName: (state: InitialStateInterface, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
-    setEmail: (state: InitialStateType, action: PayloadAction<string>) => {
+    setEmail: (state: InitialStateInterface, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
-    setPassword: (state: InitialStateType, action: PayloadAction<string>) => {
+    setPassword: (
+      state: InitialStateInterface,
+      action: PayloadAction<string>,
+    ) => {
       state.password = action.payload;
     },
     setShowPassword: (
-      state: InitialStateType,
-      action: PayloadAction<boolean>
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
     ) => {
       state.showPassword = action.payload;
     },
     setPasswordStrength: (
-      state: InitialStateType,
-      action: PayloadAction<string>
+      state: InitialStateInterface,
+      action: PayloadAction<string>,
     ) => {
       state.passwordStrength = action.payload;
     },
     setShowPasswordStrength: (
-      state: InitialStateType,
-      action: PayloadAction<boolean>
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
     ) => {
       state.showPasswordStrength = action.payload;
     },
     setPasswordStrengthColor: (
-      state: InitialStateType,
-      action: PayloadAction<string>
+      state: InitialStateInterface,
+      action: PayloadAction<string>,
     ) => {
       state.passwordStrengthColor = action.payload;
     },
-    setLoading: (state: InitialStateType, action: PayloadAction<boolean>) => {
+    setLoading: (
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
+    ) => {
       state.loading = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.name = "";
       state.email = "";
       state.password = "";

@@ -1,14 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { TaskAddOrEditFormSliceInitialState as InitialStateInterface, TaskPriority } from "@/interfaces.js";
 
-interface InitialStateType {
-  title: string;
-  description: string;
-  priority: string | "Low Priority" | "Medium Priority" | "High Priority";
-  deadline: string;
-  loading: boolean;
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   title: "",
   description: "",
   priority: "--SELECT--",
@@ -20,25 +13,34 @@ const taskFormSlice = createSlice({
   name: "taskForm",
   initialState,
   reducers: {
-    setTitle: (state: InitialStateType, action: PayloadAction<string>) => {
+    setTitle: (state: InitialStateInterface, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
     setDescription: (
-      state: InitialStateType,
-      action: PayloadAction<string>
+      state: InitialStateInterface,
+      action: PayloadAction<string>,
     ) => {
       state.description = action.payload;
     },
-    setPriority: (state: InitialStateType, action: PayloadAction<string>) => {
+    setPriority: (
+      state: InitialStateInterface,
+      action: PayloadAction<TaskPriority>,
+    ) => {
       state.priority = action.payload;
     },
-    setDeadline: (state: InitialStateType, action: PayloadAction<string>) => {
+    setDeadline: (
+      state: InitialStateInterface,
+      action: PayloadAction<string>,
+    ) => {
       state.deadline = action.payload;
     },
-    setLoading: (state: InitialStateType, action: PayloadAction<boolean>) => {
+    setLoading: (
+      state: InitialStateInterface,
+      action: PayloadAction<boolean>,
+    ) => {
       state.loading = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.title = "";
       state.description = "";
       state.priority = "--SELECT--";

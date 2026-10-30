@@ -1,22 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type {
+  GetTaskAnalyticsSliceInitialState as InitialStateInterface,
+  PriorityAnalytics as PriorityAnalyticsInterface,
+  StatusAnalytics as StatusAnalyticsInterface,
+} from "@/interfaces.js";
 
-interface StatusAnalyticsType {
-  name: "Pending" | "In Progress" | "Completed";
-  value: number;
-}
-
-interface PriorityAnalyticsType {
-  name: "Low Priority" | "Medium Priority" | "High Priority";
-  value: number;
-}
-
-interface InitialStateType {
-  statusAnalytics: StatusAnalyticsType[];
-  priorityAnalytics: PriorityAnalyticsType[];
-  totalTasks: number;
-}
-
-const initialState: InitialStateType = {
+const initialState: InitialStateInterface = {
   statusAnalytics: [],
   priorityAnalytics: [],
   totalTasks: 0,
@@ -27,21 +16,24 @@ const getAnalyticsSlice = createSlice({
   initialState,
   reducers: {
     setStatusAnalytics: (
-      state: InitialStateType,
-      action: PayloadAction<StatusAnalyticsType[]>
+      state: InitialStateInterface,
+      action: PayloadAction<StatusAnalyticsInterface[]>,
     ) => {
       state.statusAnalytics = action.payload;
     },
     setPriorityAnalytics: (
-      state: InitialStateType,
-      action: PayloadAction<PriorityAnalyticsType[]>
+      state: InitialStateInterface,
+      action: PayloadAction<PriorityAnalyticsInterface[]>,
     ) => {
       state.priorityAnalytics = action.payload;
     },
-    setTotalTasks: (state: InitialStateType, action: PayloadAction<number>) => {
+    setTotalTasks: (
+      state: InitialStateInterface,
+      action: PayloadAction<number>,
+    ) => {
       state.totalTasks = action.payload;
     },
-    reset: (state: InitialStateType) => {
+    reset: (state: InitialStateInterface) => {
       state.statusAnalytics = [];
       state.priorityAnalytics = [];
       state.totalTasks = 0;
