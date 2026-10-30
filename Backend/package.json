@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
     "dev": "npx tsx --watch server.ts",
     "db:push": "drizzle-kit push"
@@ -41,6 +41,7 @@
     "@types/node": "^24.19.2",
     "@types/nodemailer": "^7.0.12",
     "drizzle-kit": "^0.31.11",
+    "tsc-alias": "^1.9.9",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"
   },
