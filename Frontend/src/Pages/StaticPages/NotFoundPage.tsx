@@ -1,15 +1,16 @@
-import styles from "../../Components/cssModules/notFound.module.css";
 import { Col, Image, Row } from "react-bootstrap";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
+
 import { Link } from "react-router";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+
+import styles from "@/Components/cssModules/notFound.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
 const NotFoundPage = () => {
   const { theme } = useThemeContext();
   const isThemeDark: boolean = theme === "dark";
 
   return (
-    <Layout>
+    <>
       <Row className="h-100 overflow-auto">
         <Col className={styles.col} xs={12} md={6}>
           <Image
@@ -35,7 +36,7 @@ const NotFoundPage = () => {
           </Link>
         </Col>
       </Row>
-    </Layout>
+    </>
   );
 };
 

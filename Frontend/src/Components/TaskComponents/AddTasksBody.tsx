@@ -1,6 +1,6 @@
 import AddEditTasksForm from "./AddEditTasksForm.tsx";
-import styles from "../../Components/cssModules/taskForm.module.css";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import styles from "@/Components/cssModules/taskForm.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
 const AddTasksBody = ({ use }: { use: "add" | "edit" }) => {
   const { theme } = useThemeContext();

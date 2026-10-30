@@ -1,11 +1,11 @@
+import styles from "@/Components/cssModules/taskForm.module.css";
+import AddTasksBody from "@/Components/TaskComponents/AddTasksBody.tsx";
+import TaskCard from "@/Components/TaskComponents/TaskCard.tsx";
+
 import { Row, Col } from "react-bootstrap";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
-import AddTasksBody from "../../Components/TaskComponents/AddTasksBody.tsx";
-import TaskCard from "../../Components/TaskComponents/TaskCard.tsx";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../redux-toolkit/reduxStore.ts";
-import styles from "../../Components/cssModules/taskForm.module.css";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import type { RootState } from "@/redux-toolkit/reduxStore.ts";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
 const AddTasksPage = () => {
   const { theme } = useThemeContext();
@@ -29,7 +29,7 @@ const AddTasksPage = () => {
     .join("-");
 
   return (
-    <Layout>
+    <>
       <Row className="h-100 overflow-auto">
         <Col xs={12} md={8}>
           <AddTasksBody use="add" />
@@ -59,7 +59,7 @@ const AddTasksPage = () => {
           </main>
         </Col>
       </Row>
-    </Layout>
+    </>
   );
 };
 

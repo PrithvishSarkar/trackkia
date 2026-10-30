@@ -7,7 +7,6 @@ import { setShowEditModal } from "@/redux-toolkit/reduxSlices/editTaskSlice.js";
 import { reset } from "@/redux-toolkit/reduxSlices/taskFormSlice.js";
 
 import TaskCard from "@/Components/TaskComponents/TaskCard.tsx";
-import Layout from "@/Components/LayoutComponents/Layout.tsx";
 import PaginationList from "@/Components/TaskComponents/PaginationList.tsx";
 import AddEditTaskForm from "@/Components/TaskComponents/AddEditTasksForm.tsx";
 import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
@@ -30,7 +29,7 @@ const AllTasksPage = () => {
   }, []);
 
   return (
-    <Layout>
+    <>
       {/* Edit Task Modal */}
       <Modal
         show={showEditModal}
@@ -96,7 +95,7 @@ const AllTasksPage = () => {
           />
         </Container>
       )}
-    </Layout>
+    </>
   );
 };
 

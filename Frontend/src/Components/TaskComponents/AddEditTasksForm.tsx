@@ -1,18 +1,18 @@
-import styles from "../../Components/cssModules/taskForm.module.css";
+import styles from "@/Components/cssModules/taskForm.module.css";
 
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
+import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
 import {
   setTitle,
   setDescription,
   setPriority,
   setDeadline,
-} from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
+} from "@/redux-toolkit/reduxSlices/taskFormSlice.js";
 
-import handleAddEditTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js";
+import handleAddEditTaskFormSubmit from "@/helperFunctions/taskFormSubmit.js";
 import type { AddEditTaskFormProp } from "@/interfaces.js";
 
 const AddEditTaskForm = ({ isThemeDark, use }: AddEditTaskFormProp) => {

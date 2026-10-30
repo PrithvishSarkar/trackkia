@@ -1,12 +1,11 @@
 import { Col, Image, Row } from "react-bootstrap";
-import AuthMain from "../../Components/AuthComponents/AuthMain.tsx";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
-import ForgotPwdModal from "../../Components/AuthComponents/ForgotPasswordModal.tsx";
-import ResetPwdModal from "../../Components/AuthComponents/ResetPasswordModal.tsx";
+import AuthMain from "@/Components/AuthComponents/AuthMain.tsx";
+import ForgotPwdModal from "@/Components/AuthComponents/ForgotPasswordModal.tsx";
+import ResetPwdModal from "@/Components/AuthComponents/ResetPasswordModal.tsx";
 
 const LoginPage = () => {
   return (
-    <Layout>
+    <>
       {/* Modal for Password Reset starts here */}
       <ForgotPwdModal />
       <ResetPwdModal />
@@ -23,7 +22,7 @@ const LoginPage = () => {
           <Image src="/auth-page-image.jpg" alt="auth-page-image" />
         </Col>
       </Row>
-    </Layout>
+    </>
   );
 };
 

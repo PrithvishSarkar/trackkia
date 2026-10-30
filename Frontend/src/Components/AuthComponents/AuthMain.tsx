@@ -1,7 +1,6 @@
 import AuthForm from "./AuthForm.tsx";
 
-import styles from "@/cssModules/authForm.module.css";
-
+import styles from "@/Components/cssModules/authForm.module.css";
 import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
 import { Link } from "react-router";

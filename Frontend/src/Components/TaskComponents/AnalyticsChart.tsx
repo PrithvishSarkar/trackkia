@@ -1,5 +1,6 @@
 import { Container } from "react-bootstrap";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+import styles from "@/Components/cssModules/analytics.module.css";
 import {
   ResponsiveContainer,
   PieChart,
@@ -8,7 +9,6 @@ import {
   type PieSectorShapeProps,
   Sector
 } from "recharts";
-import styles from "../../Components/cssModules/analytics.module.css";
 
 interface StatusAnalyticsType {
   name: "Pending" | "In Progress" | "Completed";

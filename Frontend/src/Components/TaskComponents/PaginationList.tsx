@@ -1,7 +1,7 @@
 import { Pagination, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "../../redux-toolkit/reduxStore.js";
-import fetchTasksList from "../../helperFunctions/fetchTasks.js";
+import type { RootState, AppDispatch } from "@/redux-toolkit/reduxStore.js";
+import fetchTasksList from "@/helperFunctions/fetchTasks.js";
 
 const PaginationList = ({ taskListLength }: { taskListLength: number }) => {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,15 +1,14 @@
-// import React from 'react'
-import type React from "react";
 import Navbar from "./Navigation.tsx";
 import Footer from "./Footer.tsx";
-import styles from "../cssModules/layout.module.css";
+import styles from "@/Components/cssModules/layout.module.css";
+import { Outlet } from "react-router";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = () => {
   return (
     <main>
       <Navbar />
       <section className={styles.bodyStyle}>
-        {children}
+        <Outlet />
       </section>
       <Footer />
     </main>

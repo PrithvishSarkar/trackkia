@@ -1,10 +1,12 @@
-import styles from "../../Components/cssModules/landing.module.css";
 import { Container, Row, Col, Image } from "react-bootstrap";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
+
 import { Link } from "react-router";
+
 import { MdOutlineLogin } from "react-icons/md";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
-import { useUserNameContext } from "../../ContextAPI/UserNameContext.tsx";
+
+import styles from "@/Components/cssModules/landing.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+import { useUserNameContext } from "@/ContextAPI/UserNameContext.tsx";
 
 const LandingPage = () => {
   const { theme } = useThemeContext();
@@ -14,7 +16,7 @@ const LandingPage = () => {
   const isAuthenticated: boolean = userName !== "";
   
   return (
-    <Layout>
+    <>
       <Row className="h-100 overflow-auto">
         <Col xs lg={6}>
           <Container
@@ -77,7 +79,7 @@ const LandingPage = () => {
           />
         </Col>
       </Row>
-    </Layout>
+    </>
   );
 };
 

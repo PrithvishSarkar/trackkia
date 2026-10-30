@@ -1,17 +1,20 @@
 import type { ReactElement } from "react";
-import styles from "../cssModules/layout.module.css";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import styles from "@/Components/cssModules/layout.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
+import { useUserNameContext } from "@/ContextAPI/UserNameContext.tsx";
+
 import { Container, Image, Navbar, Offcanvas } from "react-bootstrap";
+
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FaBarsStaggered } from "react-icons/fa6";
-import { useUserNameContext } from "../../ContextAPI/UserNameContext.tsx";
 import { Link, useLocation, useNavigate } from "react-router";
 import { IoMdAddCircle } from "react-icons/io";
 import { FaClipboardCheck } from "react-icons/fa";
 import { FaChartPie } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
-import logoutUser from "../../helperFunctions/logoutUser.js";
-import nameToInitials from "../../helperFunctions/nameToInitials.js";
+
+import logoutUser from "@/helperFunctions/logoutUser.js";
+import nameToInitials from "@/helperFunctions/nameToInitials.js";
 
 const NavbarComponent = () => {
   const { theme, setTheme } = useThemeContext();

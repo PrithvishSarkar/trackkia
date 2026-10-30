@@ -1,7 +1,6 @@
 import React from "react";
 import { Row, Col, Container, Image } from "react-bootstrap";
 
-import Layout from "@/Components/LayoutComponents/Layout.tsx";
 import AnalyticsChart from "@/Components/TaskComponents/AnalyticsChart.tsx";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +27,7 @@ const AnalyticsPage = () => {
   }, [window.innerWidth]);
 
   return (
-    <Layout>
+    <>
       {/* Display Analytics as Pie Charts provided that analytics data is present */}
       {statusAnalytics && priorityAnalytics && (
         <Row className="h-100 overflow-auto">
@@ -60,7 +59,7 @@ const AnalyticsPage = () => {
           <Image src="/not-found-image-transparent.png" alt="Not Found Image" />
         </Container>
       )}
-    </Layout>
+    </>
   );
 };
 

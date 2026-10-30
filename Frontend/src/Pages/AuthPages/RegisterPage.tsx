@@ -1,10 +1,9 @@
 import { Row, Col, Image } from "react-bootstrap";
-import Layout from "../../Components/LayoutComponents/Layout.tsx";
-import AuthMain from "../../Components/AuthComponents/AuthMain.tsx";
+import AuthMain from "@/Components/AuthComponents/AuthMain.tsx";
 
 const RegisterPage = () => {
   return (
-    <Layout>
+    <>
       <Row className="h-100 overflow-auto">
         <Col xs={12} md={6}>
           <AuthMain role="register" />
@@ -17,7 +16,7 @@ const RegisterPage = () => {
           <Image src="/auth-page-image.jpg" alt="auth-page-image" />
         </Col>
       </Row>
-    </Layout>
+    </>
   );
 };
 

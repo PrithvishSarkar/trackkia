@@ -13,6 +13,7 @@ import fetchUserName from "./helperFunctions/fetchUserName.js";
 import pathRedirect from "./helperFunctions/pathRedirect.js";
 import { useUserNameContext } from "./ContextAPI/UserNameContext.tsx";
 import { useLocation, useNavigate } from "react-router";
+import Layout from "./Components/LayoutComponents/Layout.tsx";
 
 const App = () => {
   const { userName, setUserName } = useUserNameContext();
@@ -35,13 +36,15 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/add-tasks" element={<AddTasksPage />} />
-        <Route path="/all-tasks" element={<AllTasksPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/*" element={<NotFoundPage />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/add-tasks" element={<AddTasksPage />} />
+          <Route path="/all-tasks" element={<AllTasksPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
+        </Route>
       </Routes>
       <ToastContainer />
     </div>

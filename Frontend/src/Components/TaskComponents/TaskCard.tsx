@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "../cssModules/taskCard.module.css";
+import styles from "@/Components/cssModules/taskCard.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.js";
 
 import { Button, Card, Row, Col, Badge, Stack } from "react-bootstrap";
 
@@ -9,7 +10,6 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useThemeContext } from "@/ContextAPI/ThemeContext.js";
 import handleEditTask from "@/helperFunctions/editTask.js";
 import handleDeleteTask from "@/helperFunctions/deleteTask.js";
 import handleTaskStatusChange from "@/helperFunctions/taskStatusChange.js";

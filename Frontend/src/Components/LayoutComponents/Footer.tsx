@@ -1,6 +1,6 @@
 import { FaHeart } from "react-icons/fa";
-import styles from "../cssModules/layout.module.css";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.tsx";
+import styles from "@/Components/cssModules/layout.module.css";
+import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
 const Footer = () => {
   const { theme } = useThemeContext();
