@@ -1,25 +1,19 @@
+import React from "react";
 import styles from "../cssModules/taskCard.module.css";
+
 import { Button, Card, Row, Col, Badge, Stack } from "react-bootstrap";
+
 import { BsAlarm } from "react-icons/bs";
 import { FaClockRotateLeft } from "react-icons/fa6";
-import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
-import { useDispatch, useSelector } from "react-redux";
-import { useThemeContext } from "../../ContextAPI/ThemeContext.js";
-import handleEditTask from "../../helperFunctions/editTask.js";
-import handleDeleteTask from "../../helperFunctions/deleteTask.js";
-import handleTaskStatusChange from "../../helperFunctions/taskStatusChange.js";
-import React from "react";
 
-interface TaskCardPropType {
-  id: number;
-  title: string;
-  description: string;
-  priority: string | "Low Priority" | "Medium Priority" | "High Priority";
-  status: "Pending" | "In Progress" | "Completed";
-  startingDate: string;
-  deadline: string;
-  preview: boolean;
-}
+import type { AppDispatch, RootState } from "@/redux-toolkit/reduxStore.js";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useThemeContext } from "@/ContextAPI/ThemeContext.js";
+import handleEditTask from "@/helperFunctions/editTask.js";
+import handleDeleteTask from "@/helperFunctions/deleteTask.js";
+import handleTaskStatusChange from "@/helperFunctions/taskStatusChange.js";
+import type { TaskStatus, TaskCardProp } from "@/interfaces.js";
 
 const TaskCard = ({
   id,
@@ -30,7 +24,7 @@ const TaskCard = ({
   startingDate,
   deadline,
   preview,
-}: TaskCardPropType) => {
+}: TaskCardProp) => {
   const { theme } = useThemeContext();
   const isThemeDark: boolean = theme === "dark";
 
@@ -87,14 +81,10 @@ const TaskCard = ({
           gap={1}
           className="d-flex justify-content-between my-3"
         >
-          {(
-            ["Pending", "In Progress", "Completed"] as Array<
-              "Pending" | "In Progress" | "Completed"
-            >
-          ).map(
+          {(["Pending", "In Progress", "Completed"] as Array<TaskStatus>).map(
             (
-              taskStatus: "Pending" | "In Progress" | "Completed",
-              index: number
+              taskStatus: TaskStatus,
+              index: number,
             ) => (
               <Button
                 key={index}
@@ -108,7 +98,7 @@ const TaskCard = ({
               >
                 {taskStatus}
               </Button>
-            )
+            ),
           )}
         </Stack>
 
@@ -146,8 +136,8 @@ const TaskCard = ({
                   {!loading
                     ? btnText
                     : btnText === "Delete Task"
-                    ? "Deleting..."
-                    : "Edit Task"}
+                      ? "Deleting..."
+                      : "Edit Task"}
                 </Button>
               </Col>
             );
