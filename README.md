@@ -64,7 +64,7 @@ It goes beyond a simple to-do list by offering user authentication, task priorit
 |-------------------------|----------------------------------|
 | Express.js              | Web framework                    |
 | TypeScript              | Type safety                      |
-| PostgreSQL (Supabase)   | Database                         |
+| PostgreSQL (Neon)       | Database                         |
 | Drizzle ORM             | Database ORM                     |
 | bcryptjs                | Password hashing                 |
 | jsonwebtoken (JWT)      | Authentication                   |
@@ -85,7 +85,7 @@ It goes beyond a simple to-do list by offering user authentication, task priorit
 
 - Node.js (v24 or higher recommended)
 - npm (v12 or higher recommended)
-- PostgreSQL database (or Supabase account)
+- PostgreSQL database (or Neon account)
 - Gmail account (or any SMTP service) for OTP emails
 
 ### 1. Clone the repository
@@ -105,14 +105,13 @@ npm install
 Create a `.env` file in the `Backend` folder:
 
 ```env
-DB_TRANSACTION_POOLER_URL=<your_supabase_transaction_pooler_url>
-DB_SESSION_POOLER_URL=<your_supabase_session_pooler_url>
+DATABASE_URL=<your_neon_database_string>
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
-JWT_SECRET=<your_super_secret_jwt_key>
-EMAIL_SENDER=<your_email@gmail.com>
-APP_PASSWORD=<your_gmail_app_password>
-SMTP_SERVER=gmail
+JWT_SECRET=<your_secret_key>
+SMTP_SERVICE=<your_smtp_service_provider>
+SMTP_EMAIL=<your_email>
+SMTP_PASSWORD=<your_email_app_password>
 ```
 
 > **Note:** Generate a Gmail App Password if using Gmail (Account → Security → 2-Step Verification → App passwords).
