@@ -1,6 +1,8 @@
 import styles from "../../Components/cssModules/taskForm.module.css";
+
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { FaArrowRightLong } from "react-icons/fa6";
+
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../redux-toolkit/reduxStore.js";
 import {
@@ -9,14 +11,11 @@ import {
   setPriority,
   setDeadline,
 } from "../../redux-toolkit/reduxSlices/taskFormSlice.js";
+
 import handleAddEditTaskFormSubmit from "../../helperFunctions/taskFormSubmit.js";
+import type { AddEditTaskFormProp } from "@/interfaces.js";
 
-interface AddTasksPageParametersType {
-  isThemeDark: boolean;
-  use: "add" | "edit";
-}
-
-const AddEditTaskForm = ({ isThemeDark, use }: AddTasksPageParametersType) => {
+const AddEditTaskForm = ({ isThemeDark, use }: AddEditTaskFormProp) => {
   const dispatch = useDispatch<AppDispatch>();
   const { title, description, priority, deadline, loading } = useSelector(
     (state: RootState) => state.taskForm
