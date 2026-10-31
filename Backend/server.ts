@@ -23,10 +23,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-    maxAge: 86400,
   }),
 );
-app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "unsafe-none" },
+  }),
+);
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));

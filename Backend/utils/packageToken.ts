@@ -10,7 +10,8 @@ const packageToken = (id: number, res: Response) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax", // For Development and Vercel only
+    sameSite: isProduction ? "none" : "lax",
+    partitioned: true,
   });
 };
 
