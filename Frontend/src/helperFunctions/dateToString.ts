@@ -3,10 +3,7 @@ const dateToString = (date: string) => {
     .toLocaleDateString("en-IN")
     .split("/")
     .reverse()
-    .map((ele, index) => {
-      if (index === 0) return ele;
-      else return ele.padStart(2, "0");
-    })
+    .map((ele, index) => (index === 0 ? ele : ele.padStart(2, "0")))
     .join("-");
   return dateStr;
 };

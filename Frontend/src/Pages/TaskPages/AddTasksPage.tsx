@@ -7,26 +7,17 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/redux-toolkit/reduxStore.ts";
 import { useThemeContext } from "@/ContextAPI/ThemeContext.tsx";
 
+import dateToString from "@/helperFunctions/dateToString";
+
 const AddTasksPage = () => {
   const { theme } = useThemeContext();
   const isThemeDark = theme === "dark";
   const { title, description, priority, deadline } = useSelector(
-    (state: RootState) => state.taskForm
+    (state: RootState) => state.taskForm,
   );
 
   // Calculating Starting Date (Today) and converting it into appropriate string.
-  const date: Date = new Date();
-  const localDate: string = date.toLocaleDateString("en-IN", {
-    timeZone: "Asia/Kolkata",
-  });
-  const startingDate: string = localDate
-    .split("/")
-    .reverse()
-    .map((ele, index) => {
-      if (index === 0) return ele;
-      else return ele.padStart(2, "0");
-    })
-    .join("-");
+  const startingDate: string = dateToString(new Date().toDateString());
 
   return (
     <>
@@ -50,7 +41,7 @@ const AddTasksPage = () => {
               id={0}
               title={title}
               description={description}
-              priority={priority}
+              priority={priority === "--SELECT--" ? "Low Priority" : priority}
               status="Pending"
               startingDate={startingDate}
               deadline={deadline}
