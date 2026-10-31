@@ -23,6 +23,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
+    maxAge: 86400,
   }),
 );
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
