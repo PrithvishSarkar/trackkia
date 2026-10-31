@@ -4,33 +4,38 @@ import {
   setPriorityAnalytics,
   setTotalTasks,
   reset,
-} from "../redux-toolkit/reduxSlices/getAnalyticsSlice.js";
-import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
+} from "@/redux-toolkit/reduxSlices/getAnalyticsSlice.js";
+import type { AppDispatch } from "@/redux-toolkit/reduxStore.js";
 
 const fetchTasksAnalytics = async (dispatch: AppDispatch) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const ANALYTICS_PATH = import.meta.env.VITE_ANALYTICS_PATH;
   const API_CALL_URL = BACKEND_URL + ANALYTICS_PATH;
-  const response = await (
-    await fetch(API_CALL_URL, {
-      method: "GET",
-      credentials: "include",
-    })
-  ).json();
+  
+  try {
+    const response = await (
+      await fetch(API_CALL_URL, {
+        method: "GET",
+        credentials: "include",
+      })
+    ).json();
 
-  switch (response.status) {
-    case "failure":
-      toast.error(response.message);
-      dispatch(reset());
-      break;
-    case "success":
-      // toast.success(response.message);
-      dispatch(setStatusAnalytics(response.statusAnalytics));
-      dispatch(setPriorityAnalytics(response.priorityAnalytics));
-      dispatch(setTotalTasks(response.totalTasks));
-      break;
-    default:
-      break;
+    switch (response.status) {
+      case "failure":
+        toast.error(response.message);
+        dispatch(reset());
+        break;
+      case "success":
+        dispatch(setStatusAnalytics(response.statusAnalytics));
+        dispatch(setPriorityAnalytics(response.priorityAnalytics));
+        dispatch(setTotalTasks(response.totalTasks));
+        break;
+      default:
+        break;
+    }
+  } catch (err) {
+    console.error("Fetching Analytics API Call Error", err);
+    toast.error("Error occurred while fetching Tasks' Analytics");
   }
 };
 

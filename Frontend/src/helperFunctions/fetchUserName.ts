@@ -27,8 +27,8 @@ const fetchUserName = async (
         break;
     }
   } catch (err) {
-    toast.error("Username not fetched. Please refresh page.")
     console.error("API Call Error Fetching Username", err);
+    toast.error("Username not fetched. Please refresh page.")
   }
 };
 

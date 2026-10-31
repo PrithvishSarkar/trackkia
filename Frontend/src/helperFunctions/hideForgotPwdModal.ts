@@ -3,8 +3,8 @@ import {
   setUserId,
   setEmail,
   setOtp,
-} from "../redux-toolkit/reduxSlices/forgotPasswordSlice.js";
-import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
+} from "@/redux-toolkit/reduxSlices/forgotPasswordSlice.js";
+import type { AppDispatch } from "@/redux-toolkit/reduxStore.js";
 
 const handleHideForgotPwdModal = (dispatch: AppDispatch) => {
   dispatch(setEmail(""));

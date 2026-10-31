@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
   GetAllTasksSliceInitialState as InitialStateInterface,
-  TaskCardProp,
+  TaskDetail,
 } from "@/interfaces.js";
 
 const initialState: InitialStateInterface = {
@@ -29,7 +29,7 @@ const getTasksSlice = createSlice({
     },
     setTaskList: (
       state: InitialStateInterface,
-      action: PayloadAction<Omit<TaskCardProp, "preview">[]>,
+      action: PayloadAction<TaskDetail[]>,
     ) => {
       state.taskList = action.payload;
     },

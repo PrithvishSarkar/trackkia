@@ -55,7 +55,7 @@ const ResetPasswordModal = () => {
       <Modal.Body>
         <Form
           className="d-flex flex-column align-items-stretch gap-3"
-          onSubmit={(e: React.FormEvent) =>
+          onSubmit={(e: React.SubmitEvent<HTMLFormElement>) =>
             handleResetPwdSubmit(e, email, password, confirmPassword, dispatch)
           }
         >

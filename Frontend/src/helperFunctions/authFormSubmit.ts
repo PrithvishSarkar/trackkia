@@ -5,7 +5,7 @@ import type { NavigateFunction } from "react-router";
 import type React from "react";
 
 const handleAuthFormSubmit = async (
-  e: React.FormEvent<HTMLFormElement>,
+  e: React.SubmitEvent<HTMLFormElement>,
   isRoleRegister: boolean,
   name: string,
   email: string,

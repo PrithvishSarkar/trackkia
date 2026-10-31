@@ -37,7 +37,7 @@ export interface TaskCardProp {
   id: number;
   title: string;
   description: string;
-  priority: TaskPriority;
+  priority: Exclude<TaskPriority, "--SELECT--">;
   status: TaskStatus;
   startingDate: string;
   deadline: string;
@@ -66,17 +66,19 @@ export interface EditTaskModalDisplaySliceInitialState {
 // Task Add or Edit Form Slice
 export interface TaskAddOrEditFormSliceInitialState extends Pick<
   TaskCardProp,
-  "title" | "description" | "priority" | "deadline"
+  "title" | "description" | "deadline"
 > {
+  priority: TaskPriority;
   loading: boolean;
 }
 
 // Fetch All Tasks Slice
+export interface TaskDetail extends Omit<TaskCardProp, "preview"> {}
 export interface GetAllTasksSliceInitialState {
   totalTasks: number;
   totalPages: number;
   pageNumber: number;
-  taskList: Omit<TaskCardProp, "preview">[];
+  taskList: TaskDetail[];
 }
 
 // Fetch Task Analytics Slice

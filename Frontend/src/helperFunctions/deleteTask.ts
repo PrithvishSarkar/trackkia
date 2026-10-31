@@ -2,21 +2,12 @@ import React from "react";
 import { toast } from "react-toastify";
 import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
 import { setTaskList } from "../redux-toolkit/reduxSlices/getTasksSlice.js";
-
-interface TaskType {
-  id: number;
-  title: string;
-  description: string;
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
-  status: "Pending" | "In Progress" | "Completed";
-  startingDate: string;
-  deadline: string;
-}
+import type { TaskDetail } from "@/interfaces.js";
 
 const handleDeleteTask = async (
   id: number,
   dispatch: AppDispatch,
-  taskList: TaskType[],
+  taskList: TaskDetail[],
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;

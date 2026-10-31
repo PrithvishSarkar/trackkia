@@ -1,9 +1,9 @@
-import type { AppDispatch } from "../redux-toolkit/reduxStore";
+import type { AppDispatch } from "@/redux-toolkit/reduxStore";
 import {
   setShowPasswordStrength,
   setPasswordStrength,
   setPasswordStrengthColor,
-} from "../redux-toolkit/reduxSlices/resetPasswordSlice.js";
+} from "@/redux-toolkit/reduxSlices/resetPasswordSlice.js";
 
 const resetPasswordStrength = (dispatch: AppDispatch, passwordLength: number) => {
   if (passwordLength === 0) {

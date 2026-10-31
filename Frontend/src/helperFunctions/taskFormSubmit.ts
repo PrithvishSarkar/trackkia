@@ -1,33 +1,24 @@
 import { toast } from "react-toastify";
-import type { AppDispatch } from "../redux-toolkit/reduxStore.js";
+import type { AppDispatch } from "@/redux-toolkit/reduxStore.js";
 import {
   setLoading,
   reset,
-} from "../redux-toolkit/reduxSlices/taskFormSlice.js";
-import { setTaskList } from "../redux-toolkit/reduxSlices/getTasksSlice.js";
-import { setShowEditModal } from "../redux-toolkit/reduxSlices/editTaskSlice.js";
+} from "@/redux-toolkit/reduxSlices/taskFormSlice.js";
+import { setTaskList } from "@/redux-toolkit/reduxSlices/getTasksSlice.js";
+import { setShowEditModal } from "@/redux-toolkit/reduxSlices/editTaskSlice.js";
 import dateToString from "./dateToString.js";
-
-interface TaskType {
-  id: number;
-  title: string;
-  description: string;
-  priority: "Low Priority" | "Medium Priority" | "High Priority";
-  status: "Pending" | "In Progress" | "Completed";
-  startingDate: string;
-  deadline: string;
-}
+import type { TaskDetail, TaskPriority, TaskCardProp } from "@/interfaces.js";
 
 const handleAddEditTaskFormSubmit = async (
   e: React.SubmitEvent<HTMLFormElement>,
   use: "add" | "edit",
   title: string,
   description: string,
-  priority: string | "Low Priority" | "Medium Priority" | "High Priority",
+  priority: TaskPriority,
   deadline: string,
   dispatch: AppDispatch,
   taskId: number,
-  taskList: TaskType[],
+  taskList: TaskDetail[],
 ) => {
   e.preventDefault();
 
@@ -50,10 +41,7 @@ const handleAddEditTaskFormSubmit = async (
   const startingDate: string = localDate
     .split("/")
     .reverse()
-    .map((ele, index) => {
-      if (index === 0) return ele;
-      else return ele.padStart(2, "0");
-    })
+    .map((ele, index) => (index === 0 ? ele : ele.padStart(2, "0")))
     .join("-");
 
   // Check if Starting Date is less than Deadline or not.
@@ -76,6 +64,7 @@ const handleAddEditTaskFormSubmit = async (
   // Making API call to Backend.
   try {
     dispatch(setLoading(true));
+
     const response = await (
       await fetch(API_CALL_URL, {
         method: API_CALL_METHOD,
@@ -104,18 +93,14 @@ const handleAddEditTaskFormSubmit = async (
           const startingDate = dateToString(response.updatedTask.startingDate);
           const deadline = dateToString(response.updatedTask.deadline);
 
-          const updatedTaskList = taskList.map((task: TaskType) => {
+          const updatedTaskList = taskList.map((task: TaskDetail) => {
             if (task.id === response.updatedTask.id) {
-              interface UpdatedTaskDestructureType {
-                title: string;
-                description: string;
-                priority: "Low Priority" | "Medium Priority" | "High Priority";
-              }
               const {
                 title,
                 description,
                 priority,
-              }: UpdatedTaskDestructureType = response.updatedTask;
+              }: Pick<TaskCardProp, "title" | "description" | "priority"> =
+                response.updatedTask;
               return {
                 ...task,
                 title,
