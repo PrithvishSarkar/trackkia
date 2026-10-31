@@ -11,6 +11,7 @@ const packageToken = (id: number, res: Response) => {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
+    partitioned: true,
   });
 };
 
